@@ -1,15 +1,12 @@
 // # code mock debugger
-let pattern = "abcab";
-let str = "vabcabfsdfdsabcabsd";
+let pattern = "abcabdd";
+let str = "vabcabfsdfdsabcabsdfsfdfssdfs";
 let machines = new Map();
 function kmp() {
     let state = start;
-
     for (let c of str) {
         state = state(c);
-        console.log(state);
     }
-
     return state === end;
 }
 function getNext(pattern) {
@@ -30,11 +27,13 @@ function getNext(pattern) {
 
 function machineFactory() {
     let next = getNext(pattern);
-    console.log(next);
+    // console.log(next);
     for (let i = pattern.length-1;i > 0;i --) {
-        if (i == pattern.length-2) {
+        if (i == (pattern.length-2)) {
+            console.log("33333")
             machines.set(i, (c)=>{
-                if (c === str[i+1]) {
+                console.log(i, c);
+                if (c === pattern[i+1]) {
                     return end;
                 }
                 else {
@@ -45,7 +44,7 @@ function machineFactory() {
         else {
             machines.set(i, (c)=>{
                 if (c === str[i+1]) {
-                    return this.next;
+                    return null;
                 }
                 else {
                     return null;
@@ -56,7 +55,11 @@ function machineFactory() {
     for(let i = 0;i < next.length-2;i ++) {
         if (next[i] == -1) {
             machines.set(i, (c) => {
-                if (c == pattern[i]) {
+                console.log(i, c);
+                // if (i === 2) {
+                //     console.log(machines.get(3)("a"));
+                // }
+                if (c == pattern[i+1]) {
                     return machines.get(i+1);
                 }
                 else {
@@ -75,17 +78,18 @@ function machineFactory() {
             })
         }
     }  
-    debugger
 }
 machineFactory(str);
 // console.log(machines);
 console.log(kmp());
 
 function end(c) {
+    console.log('ed');
     return end;
 }
 
 function start(c) {
+    console.log('start', c);
     if (c === pattern[0]) {
         return machines.get(0);
     }
