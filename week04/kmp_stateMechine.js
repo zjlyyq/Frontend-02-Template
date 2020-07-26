@@ -1,97 +1,68 @@
-// # code mock debugger
-let pattern = "abcabdd";
-let str = "vabcabfsdfdsabcabsdfsfdfssdfs";
-let machines = new Map();
-function kmp() {
-    let state = start;
-    for (let c of str) {
-        state = state(c);
+class kmp_state_machine{
+
+    constructor(str) {
+        this.str = str;
+        this.states = new Map();
+        this._end = () => {
+            return this._end;
+        }
     }
-    return state === end;
-}
-function getNext(pattern) {
-    let m = pattern.length;
-    let next = new Array(m).fill(-1);
-    for(let i = 0;i < m;i ++) {
-        let j = i-1;
-        while(j >= 0) {
-            if (pattern[next[j]+1] === pattern[i]){
-                next[i] = next[j]+1;
-                break;
+
+    // 构建失败转移数组
+    _getNext(pattern) {
+        let m = pattern.length;
+        let next = new Array(m).fill(-1);
+        for(let i = 0;i < m;i ++) {
+            let j = i-1;
+            while(j >= 0) {
+                if (pattern[next[j]+1] === pattern[i]){
+                    next[i] = next[j]+1;
+                    break;
+                }
+                j = next[j];
             }
-            j = next[j];
         }
+        return next;
     }
-    return next;
-}
 
-function machineFactory() {
-    let next = getNext(pattern);
-    // console.log(next);
-    for (let i = pattern.length-1;i > 0;i --) {
-        if (i == (pattern.length-2)) {
-            console.log("33333")
-            machines.set(i, (c)=>{
-                console.log(i, c);
-                if (c === pattern[i+1]) {
-                    return end;
-                }
-                else {
-                    return start;
-                }
-            })
+    // 构建状态机
+    _buildStatesMachines(pattern) {
+        this.states = new Map();
+        let m = pattern.length;
+        let next = this._getNext(pattern);
+        this._start = (c) => {
+            if (c === pattern[0]) {
+                return this.states.get(0);
+            }
+            return this._start;
         }
-        else {
-            machines.set(i, (c)=>{
-                if (c === str[i+1]) {
-                    return null;
-                }
-                else {
-                    return null;
-                }
-            })
-        }
-    } 
-    for(let i = 0;i < next.length-2;i ++) {
-        if (next[i] == -1) {
-            machines.set(i, (c) => {
-                console.log(i, c);
-                // if (i === 2) {
-                //     console.log(machines.get(3)("a"));
-                // }
+        for(let i = 0;i <= next.length-2;i ++) {
+            this.states.set(i, (c) => {
                 if (c == pattern[i+1]) {
-                    return machines.get(i+1);
+                    return this.states.get(i+1);
                 }
                 else {
-                    return start(c);
+                    return next[i+1] === -1?this._start(c)
+                            :this.states.get(next[i+1]+1)(c);
                 }
             })
         }
-        else {
-            machines.set(i, (c) => {
-                if (c == pattern[i]) {
-                    return machines.get(i+1);
-                }
-                else {
-                    return machines.get(next[i]+1)(c);
-                }
-            })
-        }
-    }  
-}
-machineFactory(str);
-// console.log(machines);
-console.log(kmp());
-
-function end(c) {
-    console.log('ed');
-    return end;
-}
-
-function start(c) {
-    console.log('start', c);
-    if (c === pattern[0]) {
-        return machines.get(0);
+        this.states.set(m-1, (c) => this._end);
     }
-    return start;
+
+    search(pattern) {
+        this._buildStatesMachines(pattern);
+        let state = this._start;
+        for (let c of this.str) {
+            state = state(c);
+        }
+        console.log(state===this._end?`"${pattern}" is found`:`"${pattern}" is not found`);
+    }
 }
+
+let model_string = "vabscabddddababcabdabcabddabcabddcabcadbddabsdfsfdfssdfs";
+let ksm = new kmp_state_machine(model_string);
+ksm.search("abcabddabcabdd");
+ksm.search("abcabddabcsabdd");
+ksm.search("abcabddabcabdddd");
+ksm.search("abcabddab");
