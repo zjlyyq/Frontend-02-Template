@@ -6,9 +6,10 @@ function data(c) {
     if (c === '<') {
         return tagOpen;
     }else if(c === "\n"){
-        // emitToken(currentToken);
+        emitToken({type: "text", value: c});
         return data;
     }else {
+        emitToken({type: "text", value: c});
         return data;
     }
 }
@@ -77,7 +78,7 @@ function beforeAttributeName(c) {
     }
 }
 function attributeName(c) {
-    if (c.match(/^[\t\n\f ]$/) || c === "/" || c ===">" || c === EOF) {
+    if (c.match(/^[\t\n\f ]$/) || c === "/" || c === ">" || c === EOF) {
         return afterAttributeName(c);
     }else if(c === "=") {
         return beforeAttributeValue;
@@ -91,14 +92,64 @@ function attributeName(c) {
 function afterAttributeName(c) {
     if (c === "/") {
         return selfClosingStartTag;
+    }else if(c === ">"){
+        return data;
     }else if(c === "=") {
         return beforeAttributeValue(c);
     }
 }
 
 function beforeAttributeValue(c) {
-    
+    if (c.match(/^[\t\n\f ]$/) || c === "/" || c ===">" || c === EOF) {
+        return beforeAttributeValue;
+    }else if(c === "\"") {
+        return doubleQuotedAttributevalue;
+    }else if(c === "\'") {
+        return singleQuotedAttributevalue;
+    }else if (c === ">") {
+        emitToken(currentAttr);
+    }else {
+        return unquotedAttributevalue(c);
+    }
 }
+
+function doubleQuotedAttributevalue(c) {
+    if (c === "\"") {
+        emitToken(currentAttr);
+        console.log('doubleQuotedAttributevalue')
+        return beforeAttributeName;
+    }else {
+        currentAttr.value += c;
+        return doubleQuotedAttributevalue;
+    }
+}
+
+function singleQuotedAttributevalue(c) {
+    if (c === "\'") {
+        emitToken(currentAttr);
+        return beforeAttributeName;
+    }else {
+        currentAttr.value += c;
+        return singleQuotedAttributevalue;
+    }
+}
+
+function unquotedAttributevalue() {
+    if (c.match(/^[\t\n\f ]$/)) {
+        emitToken(currentAttr);
+        return beforeAttributeName;
+    }else if(c === "/") {
+        emitToken(currentAttr);
+        return selfClosingStartTag;
+    }else if(c === ">") {
+        emitToken(currentAttr);
+        return data;
+    }else {
+        currentAttr.value += c;
+        return unquotedAttributevalue;
+    }
+}
+
 function selfClosingStartTag(c) {
     if (c === ">") {
         currentToken.isSelfClosing = true;
