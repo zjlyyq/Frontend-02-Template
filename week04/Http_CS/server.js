@@ -13,7 +13,6 @@ const serve = http.createServer((req, res) => {
         res.writeHead(200, {"Content-Type": "text/html"});
         // res.end("Hello World!\n");
         res.end(`
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
