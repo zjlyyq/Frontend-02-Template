@@ -5,8 +5,8 @@ const EOF = Symbol('EOF');
 function data(c) {
     if (c === '<') {
         return tagOpen;
-    }else if(c === "\n"){
-        emitToken({type: "text", value: c});
+    }else if(c === EOF){
+        console.log("EOF");
         return data;
     }else {
         emitToken({type: "text", value: c});
@@ -42,9 +42,10 @@ function tagName(c) {
     // Switch to the before attribute name state.
     // <script src="..." 即将进入属性判断
     if (c.match(/^[\t\n\f ]$/)) {
-        emitToken(currentToken);
+        // emitToken(currentToken);
         return beforeAttributeName;
     }else if(c === "/") {
+        console.log('selfClosingStartTag');
         return selfClosingStartTag;
     }else if(c.match(/^[a-zA-Z]$/)) {
         currentToken.name += c;
@@ -116,14 +117,23 @@ function beforeAttributeValue(c) {
 function doubleQuotedAttributevalue(c) {
     if (c === "\"") {
         emitToken(currentAttr);
-        console.log('doubleQuotedAttributevalue')
-        return beforeAttributeName;
+        return afterDoubleQuotedAttributevalue;
     }else {
         currentAttr.value += c;
         return doubleQuotedAttributevalue;
     }
 }
-
+function afterDoubleQuotedAttributevalue(c) {
+    if (c.match(/^[\t\n\f ]$/)) {
+        return beforeAttributeName;
+    }else if(c === "/") {
+        console.log('afterDoubleQuotedAttributevalue:', c, currentToken)
+        return selfClosingStartTag;
+    }else if (c === '>'){
+        emitToken(currentToken);
+        return data;
+    }
+}
 function singleQuotedAttributevalue(c) {
     if (c === "\'") {
         emitToken(currentAttr);
@@ -139,7 +149,8 @@ function unquotedAttributevalue() {
         emitToken(currentAttr);
         return beforeAttributeName;
     }else if(c === "/") {
-        emitToken(currentAttr);
+        // emitToken(currentAttr);
+        
         return selfClosingStartTag;
     }else if(c === ">") {
         emitToken(currentAttr);
@@ -153,6 +164,7 @@ function unquotedAttributevalue() {
 function selfClosingStartTag(c) {
     if (c === ">") {
         currentToken.isSelfClosing = true;
+        emitToken(currentToken);
         return data;
     }else {
         
@@ -161,7 +173,7 @@ function selfClosingStartTag(c) {
 
 function emitToken(token) {
     console.log(token);
-    currentToken = {}
+    // currentToken = {}
 }
 module.exports = {
     parserHtml:function parserHtml(html) {
@@ -171,7 +183,6 @@ module.exports = {
         for(let c of html) {
             state = state(c);
         }
-
         state(EOF);
     }
 } 
