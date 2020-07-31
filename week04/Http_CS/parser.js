@@ -177,6 +177,7 @@ function emitToken(token) {
     console.log(token);
     // currentToken = {}
     let node = stack[stack.length];
+    if (token.type === "endtag" && token)
 }
 module.exports = {
     parserHtml:function parserHtml(html) {
