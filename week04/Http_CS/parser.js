@@ -171,9 +171,12 @@ function selfClosingStartTag(c) {
     }
 }
 
+let stack = [{type: "element", name: "document"}]
+
 function emitToken(token) {
     console.log(token);
     // currentToken = {}
+    let node = stack[stack.length];
 }
 module.exports = {
     parserHtml:function parserHtml(html) {
