@@ -18,7 +18,7 @@ function tagOpen(c) {
     if (c === '/') {
         return endTagOpen;
     }else if(c.match(/^[a-zA-Z]$/)) {
-        currentToken = {type: 'starttag', name: ''};
+        currentToken = {type: 'starttag', tageName: ''};
         return tagName(c);
     }else {
         return tagOpen;
@@ -27,7 +27,7 @@ function tagOpen(c) {
 
 function endTagOpen(c) {
     if (c.match(/^[a-zA-Z]$/)) {
-        currentToken = {type: 'endtag', name: ''};
+        currentToken = {type: 'endtag', tageName: ''};
         return tagName(c);
     }else if(c === '>') {
         return data;
@@ -48,7 +48,7 @@ function tagName(c) {
         console.log('selfClosingStartTag');
         return selfClosingStartTag;
     }else if(c.match(/^[a-zA-Z]$/)) {
-        currentToken.name += c;
+        currentToken.tageName += c;
         return tagName;
     }else if(c === ">") {
         emitToken(currentToken);
@@ -73,7 +73,8 @@ function beforeAttributeName(c) {
     }else {
         currentAttr = {
             name: "",
-            value: ""
+            value: "",
+            type: "attr"
         }
         return attributeName(c);
     }
@@ -108,7 +109,8 @@ function beforeAttributeValue(c) {
     }else if(c === "\'") {
         return singleQuotedAttributevalue;
     }else if (c === ">") {
-        emitToken(currentAttr);
+        //emitToken(currentAttr);
+        currentToken[currentAttr.name] = currentAttr.value;
     }else {
         return unquotedAttributevalue(c);
     }
@@ -116,7 +118,8 @@ function beforeAttributeValue(c) {
 
 function doubleQuotedAttributevalue(c) {
     if (c === "\"") {
-        emitToken(currentAttr);
+        //emitToken(currentAttr);
+        currentToken[currentAttr.name] = currentAttr.value;
         return afterDoubleQuotedAttributevalue;
     }else {
         currentAttr.value += c;
@@ -127,7 +130,7 @@ function afterDoubleQuotedAttributevalue(c) {
     if (c.match(/^[\t\n\f ]$/)) {
         return beforeAttributeName;
     }else if(c === "/") {
-        console.log('afterDoubleQuotedAttributevalue:', c, currentToken)
+        // console.log('afterDoubleQuotedAttributevalue:', c, currentToken)
         return selfClosingStartTag;
     }else if (c === '>'){
         emitToken(currentToken);
@@ -136,7 +139,8 @@ function afterDoubleQuotedAttributevalue(c) {
 }
 function singleQuotedAttributevalue(c) {
     if (c === "\'") {
-        emitToken(currentAttr);
+        //emitToken(currentAttr);
+        currentToken[currentAttr.name] = currentAttr.value;
         return beforeAttributeName;
     }else {
         currentAttr.value += c;
@@ -146,14 +150,16 @@ function singleQuotedAttributevalue(c) {
 
 function unquotedAttributevalue() {
     if (c.match(/^[\t\n\f ]$/)) {
-        emitToken(currentAttr);
+        //emitToken(currentAttr);
+        currentToken[currentAttr.name] = currentAttr.value;
         return beforeAttributeName;
     }else if(c === "/") {
-        // emitToken(currentAttr);
+        // //emitToken(currentAttr);
         
         return selfClosingStartTag;
     }else if(c === ">") {
-        emitToken(currentAttr);
+        //emitToken(currentAttr);
+        currentToken[currentAttr.name] = currentAttr.value;
         return data;
     }else {
         currentAttr.value += c;
@@ -171,13 +177,46 @@ function selfClosingStartTag(c) {
     }
 }
 
-let stack = [{type: "element", name: "document"}]
+let stack = [{type: "document", children: []}]
 
 function emitToken(token) {
+    if (token.type === "text") {
+        return;
+    }
+    
     console.log(token);
-    // currentToken = {}
-    let node = stack[stack.length];
-    if (token.type === "endtag" && token)
+    let node = stack[stack.length-1];
+    if (token.type === "starttag") {
+        let element = {
+            name: token.tagName,
+            type: 'element',
+            children: [],
+            attaributes: []
+        }
+
+        for (let attr in token) {
+            if (attr != "type" && attr != "tageName") {
+                element.attaributes.push({
+                    name: attr,
+                    value: token[attr]
+                })
+            }
+        }
+
+        node.children.push(element);
+        element.parent = node;
+
+        if (!element.isSelfClosing) {
+            stack.push(element);
+        }
+    }
+    if (token.type === "endtag") {
+        if (token.tagName != node.tagName) {
+            throw new Error("Tag start end doesn't match!")
+        }else {
+            stack.pop();
+        }
+    }
 }
 module.exports = {
     parserHtml:function parserHtml(html) {
@@ -188,5 +227,7 @@ module.exports = {
             state = state(c);
         }
         state(EOF);
+        console.log(stack[0]);
     }
 } 
+
