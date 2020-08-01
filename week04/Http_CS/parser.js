@@ -18,7 +18,7 @@ function tagOpen(c) {
     if (c === '/') {
         return endTagOpen;
     }else if(c.match(/^[a-zA-Z]$/)) {
-        currentToken = {type: 'starttag', tageName: ''};
+        currentToken = {type: 'starttag', tagName: ''};
         return tagName(c);
     }else {
         return tagOpen;
@@ -27,7 +27,7 @@ function tagOpen(c) {
 
 function endTagOpen(c) {
     if (c.match(/^[a-zA-Z]$/)) {
-        currentToken = {type: 'endtag', tageName: ''};
+        currentToken = {type: 'endtag', tagName: ''};
         return tagName(c);
     }else if(c === '>') {
         return data;
@@ -48,7 +48,7 @@ function tagName(c) {
         console.log('selfClosingStartTag');
         return selfClosingStartTag;
     }else if(c.match(/^[a-zA-Z]$/)) {
-        currentToken.tageName += c;
+        currentToken.tagName += c;
         return tagName;
     }else if(c === ">") {
         emitToken(currentToken);
@@ -203,7 +203,7 @@ function emitToken(token) {
         }
 
         for (let attr in token) {
-            if (attr != "type" && attr != "tageName") {
+            if (attr != "type" && attr != "tagName") {
                 element.attaributes.push({
                     name: attr,
                     value: token[attr]
@@ -214,13 +214,13 @@ function emitToken(token) {
         node.children.push(element);
         element.parent = node;
 
-        if (!element.isSelfClosing) {
+        if (!token.isSelfClosing) {
             stack.push(element);
         }
     }
     if (token.type === "endtag") {
         currentTextNode = null;
-        if (token.tagName != node.tagName) {
+        if (token.tagName != node.name) {
             throw new Error("Tag start end doesn't match!")
         }else {
             stack.pop();
