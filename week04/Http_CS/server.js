@@ -22,6 +22,7 @@ const serve = http.createServer((req, res) => {
     <style>
         p {
             color: "red";
+            font-size: 14px;
         }
     </style>
 </head>

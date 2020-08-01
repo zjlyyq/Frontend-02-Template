@@ -1,4 +1,4 @@
-const { match } = require("assert");
+const cssParser = require('css');
 
 const EOF = Symbol('EOF');
 
@@ -223,10 +223,19 @@ function emitToken(token) {
         if (token.tagName != node.name) {
             throw new Error("Tag start end doesn't match!")
         }else {
+            if (token.tagName === 'style') {
+                addCSSRules(node.children[0].content);
+            }
             stack.pop();
         }
     }
 }
+
+function addCSSRules(cssNode) {
+    let ast = cssParser.parse(cssNode);
+    console.log(ast);
+}
+
 module.exports = {
     parserHtml:function parserHtml(html) {
         let state = data;
@@ -236,7 +245,7 @@ module.exports = {
             state = state(c);
         }
         state(EOF);
-        console.log(stack[0]);
+        // console.log(stack[0]);
     }
 } 
 
