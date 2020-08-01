@@ -196,12 +196,12 @@ function emitToken(token) {
     if (token.type === "starttag") {
         currentTextNode = null;
         let element = {
-            name: token.tagName,
+            tagName: token.tagName,
             type: 'element',
             children: [],
             attaributes: []
         }
-
+        computeCSS(element);
         for (let attr in token) {
             if (attr != "type" && attr != "tagName") {
                 element.attaributes.push({
@@ -220,7 +220,7 @@ function emitToken(token) {
     }
     if (token.type === "endtag") {
         currentTextNode = null;
-        if (token.tagName != node.name) {
+        if (token.tagName != node.tagName) {
             throw new Error("Tag start end doesn't match!")
         }else {
             if (token.tagName === 'style') {
@@ -230,12 +230,79 @@ function emitToken(token) {
         }
     }
 }
-
+let rules = [];
+// 收集css
 function addCSSRules(cssNode) {
     let ast = cssParser.parse(cssNode);
-    console.log(ast);
+    // console.log(JSON.stringify(ast));
+    rules = ast.stylesheet.rules;
 }
 
+// 计算css
+function computeCSS(element) {
+    let parents = stack.slice().reverse();
+    if (!element.computedStyle) {
+        element.computedStyle = {};
+    }
+    for (let rule of rules) {
+        let selectors = rule.selectors;
+        for (let selector of selectors) {
+            let selections = selector.split(" ").reverse();
+            let specificity = getSpecificity(selector);
+            if (!match(element, selections[0])) continue;
+            if (loopCheck(parents, selections.slice(1))){
+                getComputedStyle(rule.declarations, element, specificity);
+                break;
+            }
+        }
+    }
+}
+
+// 计算选择器是否和元素匹配
+function match(element, selector) {
+    return element.tagName === selector;
+}
+
+function loopCheck(elements, selections) {
+    let j = 0;
+    for (let i = 0;j < selections.length && i < elements.length;i ++) {
+        if (match(elements[i], selections[j])) {
+            j ++;
+        }
+    } 
+    return j === selections.length;
+}
+
+// 从rule的declarations生成元素的computed属性
+function getComputedStyle(declarations, element, specificity) {
+    let computedStyle = element.computedStyle;
+    for(let declear of declarations) {
+        if (!computedStyle[declear.property]) {
+            computedStyle[declear.property] = {specificity: specificity, value: declear.value}
+        }else {
+            if (computedStyle[declear.property].specificity <= specificity) {
+                computedStyle[declear.property] = {specificity: specificity, value: declear.value}
+            }
+        }
+    }
+    console.log(element.computedStyle)
+}  
+
+// 计算css优先级
+function getSpecificity(selector) {
+    let selections = selector.split(" ").reverse();
+    let p = [0 ,0, 0, 0];
+    for (let selection of selections) {
+        if (selection.charAt("0") === "#") {
+            p[1] += 1;
+        }else if (selection.charAt(0) === ".") {
+            p[2] += 2;
+        }else {
+            p[3] += 1;
+        }
+    }
+    return p;
+}
 module.exports = {
     parserHtml:function parserHtml(html) {
         let state = data;
@@ -245,7 +312,7 @@ module.exports = {
             state = state(c);
         }
         state(EOF);
-        // console.log(stack[0]);
+        console.log(stack[0]);
     }
 } 
 

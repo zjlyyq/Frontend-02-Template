@@ -20,14 +20,26 @@ const serve = http.createServer((req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>html dom</title>
     <style>
-        p {
-            color: "red";
+        p.headline{
+            color: red;
             font-size: 14px;
+        }
+        div p, span{
+            border: 1px solid #ff0;
+            color: blue;
+        },
+        p {
+            color: red;
+        }
+        div content p#app{
+            color: blue;
         }
     </style>
 </head>
 <body>
-    <p>hello world!</p>
+    <div>
+        <p>hello world!</p>
+    </div>
 </body>
 </html>
         `);
