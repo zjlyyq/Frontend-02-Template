@@ -19,9 +19,14 @@ const serve = http.createServer((req, res) => {
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>html dom</title>
+    <style>
+        p {
+            color: "red";
+        }
+    </style>
 </head>
 <body>
-    hello world!
+    <p>hello world!</p>
 </body>
 </html>
         `);

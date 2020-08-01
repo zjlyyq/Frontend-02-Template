@@ -178,15 +178,23 @@ function selfClosingStartTag(c) {
 }
 
 let stack = [{type: "document", children: []}]
+let currentTextNode = null;
 
 function emitToken(token) {
-    if (token.type === "text") {
-        return;
-    }
-    
-    console.log(token);
     let node = stack[stack.length-1];
+    if (token.type === "text") {
+        if (currentTextNode === null) {
+            currentTextNode = {
+                type: "string",
+                content: ""
+            }
+            node.children.push(currentTextNode);
+        }
+        currentTextNode.content += token.value;
+    }
+    // console.log(token);
     if (token.type === "starttag") {
+        currentTextNode = null;
         let element = {
             name: token.tagName,
             type: 'element',
@@ -211,6 +219,7 @@ function emitToken(token) {
         }
     }
     if (token.type === "endtag") {
+        currentTextNode = null;
         if (token.tagName != node.tagName) {
             throw new Error("Tag start end doesn't match!")
         }else {
