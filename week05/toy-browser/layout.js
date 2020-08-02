@@ -37,8 +37,6 @@ function layout(element) {
     })
 
     let style = elementStyle;
-
-    // if (style)
 }
 
 module.exports = layout
