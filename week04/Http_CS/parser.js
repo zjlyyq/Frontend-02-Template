@@ -1,5 +1,5 @@
 const cssParser = require('css');
-
+const layout = require('./layout')
 const EOF = Symbol('EOF');
 
 function data(c) {
@@ -303,11 +303,11 @@ function getSpecificity(selector) {
     }
     return p;
 }
+let currentToken = {};
+let currentAttr = {};
 module.exports = {
     parserHtml:function parserHtml(html) {
         let state = data;
-        let currentToken = {};
-        let currentAttr = {};
         for(let c of html) {
             state = state(c);
         }
