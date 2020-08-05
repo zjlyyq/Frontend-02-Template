@@ -124,7 +124,8 @@ function layout(element) {
 
     let flexLine = [];
     let flexLines = [flexLine];
-    let mainSpace = elementStyle[mainSize];
+    // 主轴剩余空间
+    let mainSpace = elementStyle[mainSize];  
     let crossSpace = 0;
 
     for (let item of items) {
@@ -132,7 +133,7 @@ function layout(element) {
         if (!itemStyle[mainSize]) {
             itemStyle[mainSize] = 0;
         }
-        if (itemStyle.flex) {  //子元素可升缩， 一定可以入行
+        if (itemStyle.flex) {  //子元素可升缩， 一定可以入行，且不对剩余空间有影响
             flexLine.push(item);
         }else if (style['flex-wrap'] === "nowrap" || isAutoMainSize) {
             mainSpace -= itemStyle[mainSize];
@@ -158,7 +159,7 @@ function layout(element) {
             if (itemStyle[crossSize]) {
                 crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
             } 
-            mainSpace = elementStyle[mainSize] - itemStyle[mainSize]; 
+            mainSpace -= itemStyle[mainSize]; 
         }
     }
     flexLine.mainSpace = mainSpace;
