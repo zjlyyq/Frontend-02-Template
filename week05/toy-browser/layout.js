@@ -39,9 +39,9 @@ function layout(element) {
 
     let style = elementStyle;
 
-    ['wifth', 'height'].forEach(size => {
+    ['width', 'height'].forEach(size => {
         if (style[size] === 'auto' || style[size] === '' || style[size] === undefined ) {
-            console.log('style[size]', style[size], element.tagName);
+            // console.log('style[size]', style[size], element.tagName);
             style[size] = null;
         }
     })
@@ -115,9 +115,9 @@ function layout(element) {
 
     let isAutoMainSize = false;
     if (!style[mainSize] || style[mainSize] === 'auto') {
-        style[mainBase] = 0;
-        for (let item in items) {
-            style[mainSize] += item.elementStyle[mainSize]
+        style[mainSize] = 0;
+        for (let item of items) {
+            style[mainSize] += item.style[mainSize]
         }
         isAutoMainSize = true;
     }
