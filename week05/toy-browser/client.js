@@ -238,4 +238,5 @@ void async function() {
 
     // 将responsed解析为dom树
     let dom = parser.parserHtml(responsed.body);
+    console.log(dom);
 }();

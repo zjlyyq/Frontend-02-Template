@@ -114,6 +114,7 @@ function layout(element) {
     }
 
     let isAutoMainSize = false;
+    if (style['flex-wrap'] === undefined) style['flex-wrap'] = 'nowrap';
     if (!style[mainSize] || style[mainSize] === 'auto') {
         style[mainSize] = 0;
         for (let item of items) {
@@ -174,7 +175,8 @@ function layout(element) {
         flexLine.crossSpace = crossSpace;
     }
     console.log(flexLines);
-
+    
+    // 计算主轴尺寸
     // 主轴剩余尺寸小于0，说明元素的主轴尺寸是auto或flex-wrap是no-wrap，这两种场景会将所有子元素收进一行。
     if (mainSpace < 0) {
         let scale = style[mainSize] / (style[mainSize] - mainSpace);
@@ -250,6 +252,93 @@ function layout(element) {
             }
         }
     }
+
+   
+    /*
+    计算交叉轴:
+    交叉轴基本规则解释：flex-wrap属性，默认是nowrap， 也就是强行收到一行。
+    如果元素没有定义交叉轴尺寸，则会由子元素的交叉轴尺寸撑起，
+    如果元素定义了交叉轴尺寸，子元素也定义了，则各显示各的，也就是说子元素可能会超出
+    */
+    // crossSpace;   // 交叉轴剩余空间(前面已经定义过, 不必重复定义)
+    if (!style[crossSize]) { // auto size
+        style[crossSize] = 0;
+        crossSpace = 0;
+        flexLines.map(line => style[crossSize] += line.crossSpace);
+    }else {
+        crossSpace = style[crossSize];
+        flexLines.map(line => crossSpace -= line.crossSpace);
+    }
+
+    // 检查交叉轴排布方向
+    if (style['flex-wrap'] === 'wrap-reverse') {
+        crossBase = style[crossSize];
+    }else {
+        crossBase = 0;
+    }
+
+    let lineSize = style[crossSize] / flexLines.length;  // 不知道做什么的
+    let step = 0;
+    // 之前我一直不太清楚align-content属性的作用，只是用align-items
+    if (style['align-content'] === 'flex-start') {
+        crossBase = 0;
+        step = 0;
+    }
+    if (style['align-content'] === 'flex-end') {
+        crossBase += crossSign * crossSpace;
+        step = 0;
+    }
+    if (style['align-content'] === 'space-around') {
+        step = crossSpace/flexLines.length;
+        crossBase += crossSign * step / 2;
+    }
+    if (style['align-content'] === 'center') {
+        step = 0;
+        crossBase += crossSign * crossSpace / 2;
+    }
+    if (style['align-content'] === 'space-bewteen') {
+        step = crossSpace/(flexLines.length-1);
+        crossBase += 0;
+    }
+    if (style['align-content'] === 'stretch') {
+        step = 0;
+        crossBase = 0;
+    }
+
+    for (let line of flexLines) {
+        let lineCrossSize = style['align-content'] === 'stretch' ? 
+            line.crossSpace + crossSpace / line.length : 
+            line.crossSpace;
+
+        for (let item of line) {
+            let itemStyle = getStyle(item);
+            let align = itemStyle['alignSelf'] || style['align-items'];
+
+            if (!itemStyle[crossSize] === undefined) {
+                itemStyle[crossSize] = (align === 'stretch') ? 
+                    lineCrossSize : 0;
+            }
+            if (align === 'flex-start') {
+                itemStyle[crossStart] = crossBase;
+                itemStyle[crossEnd] = itemStyle[crossStart] + itemStyle[crossSize] * crossSign;
+            }
+            if (align === 'flex-end') {
+                itemStyle[crossEnd] = crossBase + crossSign * lineCrossSize;
+                itemStyle[crossStart] = itemStyle[crossEnd] - crossSign * itemStyle[crossSize];
+            }
+            if (align === 'center') {
+                itemStyle[crossEnd] = crossBase + crossSign * (lineCrossSize-itemStyle[crossSize])/2;
+                itemStyle[crossStart] = itemStyle[crossEnd] - crossSign * itemStyle[crossSize];
+            }
+            if (align === 'stretch') {
+                itemStyle[crossStart] = crossBase;
+                itemStyle[crossEnd] = crossBase + crossSign * temStyle[crossSize];
+                // itemStyle[crossStart] = itemStyle[crossEnd] - crossSign * itemStyle[crossSize];
+            }
+        }
+        crossBase += crossSign * (lineCrossSize + step);
+    }
+
 }
 
 module.exports = layout
