@@ -7,8 +7,8 @@ function getStyle(element) {
     for (let prop in element.computedStyle) {
         let p = element.computedStyle[prop];
         element.style[prop] = element.computedStyle[prop].value;
-
-        if (element.style[prop].toString().match('/px$/')) {
+        //  将字符串60px转换为数字60
+        if (element.style[prop].toString().match('px')) {
             element.style[prop] = parseInt(element.style[prop])
         }
         if (element.style[prop].toString().match('/^[0-9\.]+$/')) {
@@ -67,7 +67,7 @@ function layout(element) {
         mainBase = 0;
 
         crossSize = 'height';
-        crossEnd = 'bottpm';
+        crossEnd = 'bottom';
         crossStart = 'top';
     }
     if (style['flex-direction'] === 'row-reverse') {
@@ -78,7 +78,7 @@ function layout(element) {
         mainBase = style.width;
 
         crossSize = 'height';
-        crossEnd = 'bottpm';
+        crossEnd = 'bottom';
         crossStart = 'top';
     }
     if (style['flex-direction'] === 'column') {
@@ -174,7 +174,7 @@ function layout(element) {
     }else {
         flexLine.crossSpace = crossSpace;
     }
-    console.log(flexLines);
+    // console.log(flexLines);
     
     // 计算主轴尺寸
     // 主轴剩余尺寸小于0，说明元素的主轴尺寸是auto或flex-wrap是no-wrap，这两种场景会将所有子元素收进一行。
@@ -217,29 +217,29 @@ function layout(element) {
             }else {
                 let currentMain = mainBase;
                 let step = 0;
-                if (style['flex-direction'] === 'flex-start') {
+                if (style['justify-content'] === 'flex-start') {
                     currentMain = mainBase;
                     step = 0;
                 }   
-                if (style['flex-direction'] === 'flex-end') {
+                if (style['justify-content'] === 'flex-end') {
                     currentMain = mainSpace * mainSign + mainBase;
                     step = 0;
                 }
-                if (style['flex-direction'] === 'center') {
+                if (style['justify-content'] === 'center') {
                     currentMain = mainSpace * mainSign / 2;
                     step = 0;
                 }
-                if (style['flex-direction'] === 'center') {
+                if (style['justify-content'] === 'center') {
                     currentMain = mainSpace * mainSign / 2 + mainBase;
                     step = 0;
                 }
                 // 间隔体现在元素间
-                if (style['flex-direction'] === 'space-bewteen') {
+                if (style['justify-content'] === 'space-bewteen') {
                     currentMain = mainBase;
                     step = mainSpace / (line.length-1) * mainSign;
                 }
                 // 前后有间隔
-                if (style['flex-direction'] === 'space-around') {
+                if (style['justify-content'] === 'space-around') {
                     step = mainSpace / line.length * mainSign;
                     currentMain = step / 2 + mainBase;
                 }
@@ -313,7 +313,6 @@ function layout(element) {
         for (let item of line) {
             let itemStyle = getStyle(item);
             let align = itemStyle['alignSelf'] || style['align-items'];
-
             if (!itemStyle[crossSize] === undefined) {
                 itemStyle[crossSize] = (align === 'stretch') ? 
                     lineCrossSize : 0;
@@ -327,8 +326,8 @@ function layout(element) {
                 itemStyle[crossStart] = itemStyle[crossEnd] - crossSign * itemStyle[crossSize];
             }
             if (align === 'center') {
-                itemStyle[crossEnd] = crossBase + crossSign * (lineCrossSize-itemStyle[crossSize])/2;
-                itemStyle[crossStart] = itemStyle[crossEnd] - crossSign * itemStyle[crossSize];
+                itemStyle[crossStart] = crossBase + crossSign * (lineCrossSize-itemStyle[crossSize])/2;
+                itemStyle[crossEnd] = itemStyle[crossStart] + crossSign * itemStyle[crossSize];
             }
             if (align === 'stretch') {
                 itemStyle[crossStart] = crossBase;

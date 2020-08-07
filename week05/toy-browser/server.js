@@ -20,7 +20,7 @@ const serve = http.createServer((req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>html dom</title>
     <style>
-        body, p, div {
+        body, div {
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -39,6 +39,9 @@ const serve = http.createServer((req, res) => {
         div p, span{
             border: 1px solid red;
             color: blue;
+            height: 30px;
+            width: 90px;
+            background: green;
         },
         p {
             color: red;
