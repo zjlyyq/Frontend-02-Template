@@ -35,13 +35,16 @@ const serve = http.createServer((req, res) => {
             flex-direction: row;
             justify-content: center;
             align-items: center;
+            background: rgb(255,0,50);
+            width: 400px;
+            height:300px;
         }
         div p, span{
             border: 1px solid red;
             color: blue;
             height: 30px;
             width: 90px;
-            background: green;
+            background: rgb(255,255,45);
         },
         p {
             color: red;

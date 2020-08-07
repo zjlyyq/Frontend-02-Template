@@ -1,5 +1,6 @@
 const net = require('net');
 const parser = require('./parser');
+const images = require('images');
 
 class ChunkedBodyParser{
     constructor() {
@@ -239,4 +240,22 @@ void async function() {
     // 将responsed解析为dom树
     let dom = parser.parserHtml(responsed.body);
     console.log(dom);
+
+    let viewport = images(800, 600);
+    let render = (viewport, element) => {
+        let img = images(element.style.width, element.style.height);
+        if (element.style && element.style.background) {
+            let color = element.style.background || "rgb(100,10,0)";
+            color.match(/rgb\((\d+),(\d+),(\d+)\)/);
+            img.fill(Number(RegExp.$1), Number(RegExp.$2), Number(RegExp.$3));
+            viewport.draw(img,  element.style.left || 0, element.style.top || 0);
+            for (let c of element.children) {
+                if (c.type === 'element')
+                    render(viewport, c);
+            }
+        }
+    };
+    let el = dom.children[1].children[3].children[1];
+    render(viewport, el)
+    viewport.save("./viewport.jpg");
 }();
