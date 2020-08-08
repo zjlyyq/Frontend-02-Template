@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body, html {
+            height: 100%;
+        }
+        /* type_selector HASH */
+        div#app {
+            font-size: 14px;
+            height: 100%;
+            background: #333;
+        }
+        /* type_selector class */
+        div.nav {
+            width: 30%;
+            height: 100%;
+            background: #fff;
+            display: inline-block;
+        }
+        div.content {
+            width: 50%;
+            height: 100%;
+            background: #fff;
+            display: inline-block;
+        }
+        /* type_selector attrib*/
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="nav"></div>
+        <div class="content" contenteditable="true"></div>
+    </div>
+</body>
+</html>
