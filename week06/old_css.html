@@ -1,39 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        body, html {
+        body,
+        html {
             height: 100%;
+            --body-background: #c5ddcd;
         }
+
         /* type_selector HASH */
         div#app {
             font-size: 14px;
-            height: 100%;
+            height: 50%;
             background: #333;
+            display: flex;
+            justify-content: space-around;
+            /* 定义编辑框背景色，可以在子元素中使用 */
+            --edit-background: #b5b8b6;
         }
+
         /* type_selector class */
         div.nav {
             width: 30%;
-            height: 100%;
             background: #fff;
             display: inline-block;
         }
-        div.content {
-            width: 50%;
-            height: 100%;
-            background: #fff;
-            display: inline-block;
-        }
+
         /* type_selector attrib*/
+        div[contenteditable=true] {
+            margin: 10px;
+            flex: 1;
+            background: #fff;
+            display: inline-block;
+            /* 使用在父元素中定义的编辑框背景色 */
+            background: var(--edit-background);
+            caret-color: aqua;
+            text-indent: 1em;
+        }
+
+        /* type_selector attrib pseudo */
+        div[contenteditable=true]::before {
+            content: '🏷';
+            position: relative;
+            left: -20px;
+        }
+
+        /* type_selector negation */
+        /* :not(div) {
+            background-color: var(--body-background);
+            color: red;
+        } */
+
+        div#id.cl1.cl2 p{
+            color: green;
+        }
+        div.cl1#id p{
+            color: palevioletred;
+        }
+        div#app2 p {
+            color: purple;
+        }
+        
+        div#app2>p {
+            color: aquamarine;
+        }
+        p {
+            color: blue;
+        }
+        div#app2 + div#app3 {
+            background: #ff0;
+        }
+        p::first-line {
+            color: aquamarine;
+            float: left;
+        }
+        p::first-letter {
+            font-size: 20px;
+            float: left;
+        }
     </style>
 </head>
+
 <body>
+    <h3>css选择器 </h3>
     <div id="app">
         <div class="nav"></div>
         <div class="content" contenteditable="true"></div>
     </div>
+    
+    <div id="id" class="cl1 cl2">
+        <div>
+            <p>👀点击数</p> 
+        </div>
+    </div>
+    <div id="app2">
+        <p>div#id的直系儿子节点。</p>
+    </div>
+    <div id="app3">
+        <p>div#id的直系儿子节点。</p>
+    </div>
+    <div>
+        <p>
+            So that authors can exploit the forward-compatible parsing rules to assign fallback values, CSS renderers must treat as invalid (and ignore as appropriate) any at-rules, properties, property values, keywords, and other syntactic constructs for which they have no usable level of support. In particular, user agents must not selectively ignore unsupported property values and honor supported values in a single multi-value property declaration: if any value is considered invalid (as unsupported values must be), CSS requires that the entire declaration be ignored.
+        </p>
+    </div>
+
+    <script>
+        // Array.prototype.slice.call(
+        //     document.querySelector('#container').children
+        // ).filter(e => e.getAttribute('data-tag').includes('css')).map(
+        //     e => ({name: e.children[1].children[0].innerText,url:e.children[1].children[0].href})
+        // )
+    </script>
 </body>
+
 </html>

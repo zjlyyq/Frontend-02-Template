@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css playground</title>
+    <style>
+        div.auto {
+            width: auto;
+        }
+
+        div.child {
+            width: 1000px;
+            height: 100px;
+            display: inline-block;
+            background: #fa12dd;
+        }
+
+        .flex_end {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+        .flex_center, .space_between, .space_around, .cross_flex_start{
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background: powderblue;
+            width: 700px;
+            height: 200px;;
+        }
+        .flex_center div, 
+        .space_between div, 
+        .space_around div,
+        .cross_flex_start div{
+            width: 60px;
+            margin: 10px;
+            background: grey;
+        }
+        div.space_between {
+            justify-content: space-between;
+        }
+        div.space_around {
+            justify-content: space-around;
+        }
+        div.cross_flex_start {
+            align-items: flex-start;
+            height: 400px;
+        }
+        .cross_flex_start div {
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auto">
+        <div class="child">1</div>
+        <div class="child">2</div>
+        <div class="child">3</div>
+    </div>
+    <div class="flex_end">
+        <div>11</div>
+        <div>22</div>
+        <div>33</div>
+    </div>
+    <div class="flex_center">
+        <div>11</div>
+        <div>22</div>
+        <div style="width: 100px;">33</div>
+    </div>
+    <div class="space_between">
+        <div>11</div>
+        <div>22</div>
+        <div style="width: 100px;">33</div>
+    </div>
+    <div class="space_around">
+        <div>11</div>
+        <div>22</div>
+        <div style="width: 150px;">33</div>
+    </div>
+
+    <div class="cross_flex_start">
+        <div style="width: 350px;">11</div>
+        <div style="width: 450px;">22</div>
+        <div style="width: 550px;">33</div>
+    </div>
+
+    <div>
+        sddflsk
+    </div>
+</body>
+
+</html>
