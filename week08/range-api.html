@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>range api</title>
+</head>
+<body>
+    <h3>将下面这个ul中的li元素逆序</h3>
+    <ul id="ul" class="ul">
+        <li class="firstLi">1</li>
+        <!-- 这是一个注释节点 -->
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+    <button onclick="reverse1()">入门写法（未掌握Node API）</button>
+    <button onclick="reverse2()">Node API 解法</button>
+    <br>
+    <button onclick="window.location.reload()">重置</button>
+    <script>
+        function reverse1() {
+            let element = document.querySelector('#ul');
+            let children = Array.prototype.slice.call(element.childNodes);
+            for (let child of children) {
+                ul.removeChild(child);
+            }
+            for (let child of children.reverse()) {
+                ul.appendChild(child);
+            }
+        }
+
+        function reverse2() {
+            let element = document.querySelector('#ul');
+            // for(let node of element.childNodes) {
+            //     console.log(node.nodeType, node);
+            // }
+            // ul.childNodes 是NodeList, 不是数组，需要转换为数组才可以使用数组的原生API
+            let childs = Array.from(element.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
+            let firstNode = childs[0];
+            for (let child of childs) {
+                if (child.isSameNode(firstNode)) continue;
+                firstNode = ul.insertBefore(child, firstNode);
+            }
+        }
+    </script>
+</body>
+</html>
