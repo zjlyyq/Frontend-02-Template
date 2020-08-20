@@ -17,6 +17,7 @@
     </ul>
     <button onclick="reverse1()">入门写法（未掌握Node API）</button>
     <button onclick="reverse2()">Node API 解法</button>
+    <button onclick="reverse3()">Range API 解法</button>
     <br>
     <button onclick="window.location.reload()">重置</button>
     <script>
@@ -43,6 +44,17 @@
                 if (child.isSameNode(firstNode)) continue;
                 firstNode = ul.insertBefore(child, firstNode);
             }
+        }
+        function reverse3() {
+            let element = document.querySelector('#ul');
+            let range = new Range();
+            range.selectNodeContents(element);
+            // 取出ul所有节点,nodes为fragment对象
+            let nodes = range.extractContents();
+            console.log(nodes);
+            console.log(Array.from(nodes));
+            // range.insertNode(document.createTextNode('aaa'));
+            Array.from(nodes).forEach(e => range.insertNode(e));
         }
     </script>
 </body>
