@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>at rules</title>
+    <style>
+        @counter-style myli {
+            system: cyclic;
+            symbols: ‣;
+            suffix: " ";
+        }
+        @keyframes kf1 {
+            from {
+                position: relative;
+                font-size: 10px;
+                left: 1000px;
+            }
+            to {
+                position: relative;
+                left: 0;
+                font-size: 20px;
+            }
+        }
+        .item {
+            list-style: myli;
+            /* list-style: decimal-leading-zero; */
+            animation: kf1 2s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li class="item">111111111</li>
+        <li class="item">222222222</li>
+        <li class="item">33333333333333</li>
+        <li class="item">44444444444444</li>
+        <li class="item">5555555555555</li>
+        <li class="item">6666666666666</li>
+    </ul>
+</body>
+
+</html>
