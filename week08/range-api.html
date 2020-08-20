@@ -20,7 +20,16 @@
     <button onclick="reverse3()">Range API 解法</button>
     <br>
     <button onclick="window.location.reload()">重置</button>
+    <button onclick="insertInit(1995)">批量插入li节点</button>
     <script>
+        function insertInit(num) {
+            let element = document.querySelector('#ul');
+            while(num --) {
+                let li = document.createElement('li');
+                li.innerText = '' + (2001-num-1);
+                element.appendChild(li);
+            }
+        }
         function reverse1() {
             let element = document.querySelector('#ul');
             let children = Array.prototype.slice.call(element.childNodes);
@@ -50,11 +59,12 @@
             let range = new Range();
             range.selectNodeContents(element);
             // 取出ul所有节点,nodes为fragment对象
-            let nodes = range.extractContents();
-            console.log(nodes);
-            console.log(Array.from(nodes));
-            // range.insertNode(document.createTextNode('aaa'));
-            Array.from(nodes).forEach(e => range.insertNode(e));
+            let fragment = range.extractContents();
+            let l = fragment.childNodes.length;
+            while(l --) {
+                fragment.appendChild(fragment.childNodes[l])
+            }
+            element.appendChild(fragment);
         }
     </script>
 </body>
