@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=3900, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="content-type" content="text/json">
+    <meta http-equiv="refresh" content="2, ./payweb.html">
     <title>range api</title>
     <link rel="stylesheet" href="data:text/css, ul li%7Bcolor:pink;%7B">
+    <style>
+        body {
+            background: green;
+        }
+    </style>
 </head>
 <body>
     <h3>将下面这个ul中的li元素逆序</h3>
@@ -67,6 +74,12 @@
             }
             element.appendChild(fragment);
         }
+        setInterval(() => {
+            let range1 = Math.random(255)*255, range2 = Math.random(255)*255, range3 = Math.random(255)*255;
+            // console.log(`rgba(${range1}, ${range2}, ${range3}, 0.4)`)
+            document.body.style.background = `rgba(${range1}, ${range2}, ${range3}, 0.4)`;
+            // console.log( document.body.style.background)
+        },1000)
     </script>
 </body>
 </html>
