@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红黄绿灯</title>
+    <style>
+        .light {
+            width: 200px;
+            padding: 10px;
+            border-radius: 40px;
+            background-color: beige;
+        }
+
+        .ll {
+            border-radius: 50%;
+            height: 200px;
+            background-color: rgba(0, 0, 0, .7);
+            margin: 10px 0;
+        }
+
+        .ll.green {
+            background: green;
+        }
+
+        .ll.yellow {
+            background: yellow;
+        }
+
+        .ll.red {
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="light">
+        <div class="ll " id="green"></div>
+        <div class="ll" id="yellow"></div>
+        <div class="ll " id="red"></div>
+    </div>
+
+    <script>
+        let lights = document.getElementsByClassName('ll');
+        let yellowLight = document.querySelector('#yellow');
+        let greenLight = document.querySelector('#green');
+        let redLight = document.querySelector('#red');
+        function green() {
+            Array.from(lights).forEach(element => {
+                element.className = "ll";
+            });
+            greenLight.classList.add('green');
+            setTimeout(red, 1000 * 2);
+        }
+
+        function yellow() {
+            Array.from(lights).forEach(element => {
+                element.className = "ll";
+            });
+            yellowLight.classList.add('yellow');
+            setTimeout(green, 1000 * 2);
+        }
+
+        function red() {
+            console.log(redLight.classList)
+            Array.from(lights).forEach(element => {
+                element.className = "ll";
+            });
+            redLight.classList.add('red')
+            setTimeout(yellow, 1000 * 2);
+        }
+        red();
+    </script>
+</body>
+
+</html>

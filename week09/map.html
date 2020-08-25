@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图寻路</title>
+    <style>
+        div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .cell {
+            line-height: 8px;
+            width: 7px;
+            height: 7px;
+            border-bottom: 1px white solid;
+            border-right: 1px white solid;
+            background: rgba(0, 0, 0, .3);
+            display: inline-block;
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" style="width: 806px;line-height: 8px;margin: 0 auto;">
+
+    </div>
+
+    <script>
+        let map = localStorage['map'] ? localStorage['map'] : new Array(10000).fill(0);
+        let container = document.querySelector('#container');
+        let clear = false;
+        let mousedown = false;
+        for (let i = 0; i < 100; i++) {
+            for (let j = 0; j < 100; j++) {
+                let cell = document.createElement('div');
+                cell.classList.add("cell");
+                container.appendChild(cell);
+                cell.addEventListener('mousemove', () => {
+                    console.log('bubbp')
+                    if (mousedown) {
+                        if (clear) {
+                            map[i*100 + j] = 0;
+                            cell.style.background = "";
+                        }else {
+                            map[i*100 + j] = 0;
+                            cell.style.background = "black";
+                        }
+                    }
+                })
+            }
+        }
+
+        document.addEventListener('mousedown', (event) => {
+            console.log(event);
+            mousedown = true;
+            clear = event.which === 1
+        })
+        document.addEventListener('mouseup', (event) => {
+            mousedown = false;
+        })
+        document.addEventListener('contextmenu', (e) => e.preventDefault())
+    </script>
+</body>
+
+</html>
