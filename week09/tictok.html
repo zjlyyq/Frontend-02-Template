@@ -6,7 +6,9 @@
     <title>TicTacToa</title>
     <style>
         .board {
+            /* display: inline-block; */
             width: 620px;
+            vertical-align: bottom;
         }
         .cell {
             width: 200px;
@@ -16,7 +18,9 @@
             box-sizing: border-box;
             background: pink;
             height: 200px;
+            vertical-align: bottom;
             font-size: 80px;
+            /* float: left; */
         }
     </style>
 </head>
@@ -38,8 +42,8 @@
             let i = Math.floor(k / 3);
             let j = k % 3;
             cell.classList.add('cell');
-            cell.innerText = pattern[i][j] === 0 ? ".":
-            pattern[i][j] === 1?"❌":"⭕";
+            cell.innerText = pattern[i][j] === 0 ? "":
+            pattern[i][j] === 1 ? "❌" : "⭕";
             board.appendChild(cell);
         }
     </script>
