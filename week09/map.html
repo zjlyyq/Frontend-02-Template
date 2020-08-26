@@ -10,7 +10,15 @@
             margin: 0;
             padding: 0;
         }
-
+       body {
+           display: flex;
+           align-items: center;
+           position: fixed;
+           top: 0;
+           bottom: 0;
+           left: 0;
+           right: 0;
+       }
         .cell {
             line-height: 8px;
             width: 7px;
@@ -46,7 +54,7 @@
                             map[i*100 + j] = 0;
                             cell.style.background = "";
                         }else {
-                            map[i*100 + j] = 0;
+                            map[i*100 + j] = 1;
                             cell.style.background = "black";
                         }
                     }
@@ -62,7 +70,37 @@
         document.addEventListener('mouseup', (event) => {
             mousedown = false;
         })
-        document.addEventListener('contextmenu', (e) => e.preventDefault())
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        function path(map, start, end) {
+            let queue = [start];
+
+            function insert(x, y) {
+                if (x < 0 || x > 99) return;
+                if (y < 0 || y > 99) return;
+                if (map[100*x + y]) return;
+                map[100*x + y] = 2;
+                queue.push([x, y]);
+            }
+
+            while(queue.length > 0) {
+                let qsize = queue.length;
+                while(qsize --) {
+                    let cur = queue.shift();
+                    let dir = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+                    let next;
+                    for (let i = 0;i < dir.length;i ++) {
+                        let e = dir[i];
+                        next = [cur[0]+e[0], cur[1]+e[1]];
+                        if (next[0] == end[0] && next[1] == end[1]) {
+                            return true;
+                        }
+                        insert(next[0], next[1]);
+                    }
+                }
+            }
+            return false;
+        }
     </script>
 </body>
 
