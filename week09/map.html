@@ -33,10 +33,8 @@
 </head>
 
 <body>
-    <div id="container" style="width: 806px;line-height: 8px;margin: 0 auto;">
-
-    </div>
-
+    <div id="container" style="width: 806px;line-height: 8px;margin: 0 auto;"></div>
+    <button onclick="find()">find</button>
     <script>
         let map = localStorage['map'] ? localStorage['map'] : new Array(10000).fill(0);
         let container = document.querySelector('#container');
@@ -71,35 +69,80 @@
             mousedown = false;
         })
         document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-        function path(map, start, end) {
-            let queue = [start];
-
-            function insert(x, y) {
+        async function sleep(time) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, time);
+            })
+        }
+        async function path(map, start, end) {
+            let queue = new Sorted([start], (a, b) => distance(a, end)-distance(b, end));
+            container.children[100*0 + 0].style.background = "green";
+            map[0] = 2;
+            async function insert(x, y) {
                 if (x < 0 || x > 99) return;
                 if (y < 0 || y > 99) return;
                 if (map[100*x + y]) return;
                 map[100*x + y] = 2;
-                queue.push([x, y]);
+                queue.give([x, y]);
+                await sleep(50);
+                container.children[100*x + y].style.background = "green";
             }
 
-            while(queue.length > 0) {
-                let qsize = queue.length;
+            while(queue.data.length > 0) {
+                let qsize = queue.data.length;
                 while(qsize --) {
-                    let cur = queue.shift();
+                    let cur = queue.take();
+                    console.log(cur);
                     let dir = [[1, 0], [0, 1], [-1, 0], [0, -1]];
                     let next;
                     for (let i = 0;i < dir.length;i ++) {
                         let e = dir[i];
                         next = [cur[0]+e[0], cur[1]+e[1]];
                         if (next[0] == end[0] && next[1] == end[1]) {
+                            console.log('find 😂')
                             return true;
                         }
-                        insert(next[0], next[1]);
+                        await insert(next[0], next[1]);
                     }
                 }
             }
+            console.log('not find 😥')
             return false;
+        }
+
+        function find() {
+            path(map, [0,0], [50, 50])
+        }
+
+        class Sorted {
+            constructor(data, compare) {
+                this.data = data.slice();
+                this.compare = compare?compare:(a, b) => a-b;
+            }
+
+            take() {
+                let size = this.data.length;
+                if (size === 0) return;
+                let min = this.data[0];
+                let minIndex = 0;
+                for (let i = 1;i < size;i ++) {
+                    if (this.compare(this.data[i], min) < 0) {
+                        min = this.data[i];
+                        minIndex = i;
+                    }
+                }
+                this.data[minIndex] = this.data[size-1];
+                this.data.pop();
+                return min;
+            }
+
+            give(value) {
+                this.data.push(value);
+            }
+        }
+        function distance(a, b) {
+            let x = a[0] - b[0], y = a[1] - b[1];
+            return x ** 2 + y ** 2;
         }
     </script>
 </body>
