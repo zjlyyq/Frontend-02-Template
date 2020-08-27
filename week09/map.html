@@ -20,6 +20,7 @@
            right: 0;
        }
         .cell {
+            /* background-color: greenyellowyellow; */
             line-height: 8px;
             width: 7px;
             height: 7px;
@@ -36,6 +37,7 @@
     <div id="container" style="width: 806px;line-height: 8px;margin: 0 auto;"></div>
     <button onclick="find()">find</button>
     <script>
+        let pathcache = new Map();
         let map = localStorage['map'] ? localStorage['map'] : new Array(10000).fill(0);
         let container = document.querySelector('#container');
         let clear = false;
@@ -76,8 +78,9 @@
         }
         async function path(map, start, end) {
             let queue = new Sorted([start], (a, b) => distance(a, end)-distance(b, end));
-            container.children[100*0 + 0].style.background = "green";
+            container.children[100*0 + 0].style.background = "greenyellow";
             map[0] = 2;
+            
             async function insert(x, y) {
                 if (x < 0 || x > 99) return;
                 if (y < 0 || y > 99) return;
@@ -85,11 +88,11 @@
                 map[100*x + y] = 2;
                 queue.give([x, y]);
                 await sleep(50);
-                container.children[100*x + y].style.background = "green";
+                container.children[100*x + y].style.background = "greenyellow";
             }
 
-            while(queue.data.length > 0) {
-                let qsize = queue.data.length;
+            while(queue.qSise > 0) {
+                let qsize = queue.qSise;
                 while(qsize --) {
                     let cur = queue.take();
                     console.log(cur);
@@ -117,6 +120,14 @@
         class Sorted {
             constructor(data, compare) {
                 this.data = data.slice();
+                Object.defineProperty(this, 'qSise', {
+                    get: function() {
+                        return this.data.length;
+                    },
+                    set: function(value) {
+                        console.log('resize')
+                    }
+                })
                 this.compare = compare?compare:(a, b) => a-b;
             }
 
@@ -133,11 +144,13 @@
                 }
                 this.data[minIndex] = this.data[size-1];
                 this.data.pop();
+                this.qSise = this.data.length;
                 return min;
             }
 
             give(value) {
                 this.data.push(value);
+                this.qSise = this.data.length;
             }
         }
         function distance(a, b) {
