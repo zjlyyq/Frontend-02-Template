@@ -1,10 +1,16 @@
 
-let sleep = (sleepTime) => {
+let sleep1 = (sleepTime) => {
     console.log("sleepTime");
     return new Promise((resolve, reject) => {
         setTimeout(resolve, sleepTime);
     });
 };
+let bt = document.querySelector('#next');
+let sleep = () => {
+    return new Promise((resolve, reject) => {
+        bt.addEventListener('click', resolve);
+    });
+}
 let lights = document.getElementsByClassName("ll");
 let yellowLight = document.querySelector("#yellow");
 let greenLight = document.querySelector("#green");
