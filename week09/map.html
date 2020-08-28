@@ -38,6 +38,7 @@
     <button onclick="find()">find</button>
     <script>
         let pathcache = new Map();
+        let distcache = new Map();
         let map = localStorage['map'] ? localStorage['map'] : new Array(10000).fill(0);
         let container = document.querySelector('#container');
         let clear = false;
@@ -78,35 +79,44 @@
         }
         async function path(map, start, end) {
             let queue = new Sorted([start], (a, b) => distance(a, end)-distance(b, end));
+            distcache.set(start[0]*100 + start[1], 0);
             container.children[100*0 + 0].style.background = "greenyellow";
-            map[0] = 2;
-            
-            async function insert(x, y) {
+            map[0] = 1;
+            async function insert(pre, x, y) {
                 if (x < 0 || x > 99) return;
                 if (y < 0 || y > 99) return;
-                if (map[100*x + y]) return;
-                map[100*x + y] = 2;
+                if (map[100*x + y] ) return;
+                if (pathcache.get(x*100+y) ) {
+                    // 节点已访问过，且上次访问到该节点同的步数少于本次访问到的步数才return，否则更新该节点的父节点
+                    if (distcache.get(x*100+y) <= distcache.get(pre[0]*100+pre[1])+1) {
+                        return;
+                    }
+                    console.log(pre , [x, y]);
+                }
+                pathcache.set(100*x + y, pre);
+                distcache.set(100*x + y, distcache.get(pre[0]*100+pre[1]) + 1);
+                // map[100*x + y] = 2;
                 queue.give([x, y]);
-                await sleep(50);
+                await sleep(10);
                 container.children[100*x + y].style.background = "greenyellow";
             }
-
+            
             while(queue.qSise > 0) {
-                let qsize = queue.qSise;
-                while(qsize --) {
-                    let cur = queue.take();
-                    console.log(cur);
-                    let dir = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-                    let next;
-                    for (let i = 0;i < dir.length;i ++) {
-                        let e = dir[i];
-                        next = [cur[0]+e[0], cur[1]+e[1]];
-                        if (next[0] == end[0] && next[1] == end[1]) {
-                            console.log('find 😂')
-                            return true;
-                        }
-                        await insert(next[0], next[1]);
+                let [x, y] = queue.take();
+                if (x == end[0] && y == end[1]) {
+                    console.log('find 😂')
+                    while (x != start[0] || y != start[1]) {
+                        container.children[100*x + y].style.background = "pink";
+                        [x, y] = pathcache.get(x*100 + y);
+                        await sleep(50);
                     }
+                    return true;
+                }
+                // let dir = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+                let dir = [[0, 1], [1, 0], [-1, 0], [0, -1],[1, 1], [1, -1], [-1, 1], [-1, -1]];
+                for (let i = 0;i < dir.length;i ++) {
+                    let e = dir[i];
+                    await insert([x, y], x + e[0], y + e[1]);
                 }
             }
             console.log('not find 😥')
@@ -125,7 +135,7 @@
                         return this.data.length;
                     },
                     set: function(value) {
-                        console.log('resize')
+                        // console.log('resize')
                     }
                 })
                 this.compare = compare?compare:(a, b) => a-b;
