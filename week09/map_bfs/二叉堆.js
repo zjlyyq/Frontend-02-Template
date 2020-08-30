@@ -1,7 +1,7 @@
 class Sorted {
     constructor(data, compare) {
         this.heap = [];
-        this.qSise = 0;
+        this.size = 0;
         this.compare = compare?compare:(a, b) => a-b;
         data.forEach(element => {
             this.give(element);
@@ -9,16 +9,15 @@ class Sorted {
     }
 
     take() {
-        let size = this.qSise;
-        if (size === 0) return;
+        if (this.size === 0) return;
         let min = this.heap[0];
-        let cur = 0, value = this.heap[this.qSise-1];
+        let cur = 0, value = this.heap[this.size-1];
         this.heap.pop();
-        this.qSise -= 1;
-        while(cur < this.qSise-1) {
+        this.size -= 1;
+        while(cur < this.size-1) {
             let l = 2 * cur + 1, r = 2 * cur + 2;
-            if (l >= this.qSise ) break;
-            if (r >= this.qSise) {
+            if (l >= this.size ) break;
+            if (r >= this.size) {
                 if (this.compare(this.heap[l], value) >= 0) break;
                 this.heap[cur] = this.heap[l];
                 cur = l;
@@ -35,8 +34,8 @@ class Sorted {
 
     give(value) {
         this.heap.push(value);
-        this.qSise += 1;
-        let cur = this.qSise-1;
+        this.size += 1;
+        let cur = this.size-1;
         while(cur > 0) {
             let pre = Math.floor((cur - 1) / 2);
             if (this.compare(this.heap[pre], value) > 0) {
