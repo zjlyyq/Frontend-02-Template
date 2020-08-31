@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToa</title>
+    <style>
+        .board {
+            /* display: inline-block; */
+            width: 630px;
+            vertical-align: bottom;
+        }
+        .cell {
+            width: 200px;
+            text-align: center;
+            display: inline-block;
+            line-height: 200px;
+            box-sizing: border-box;
+            background: pink;
+            height: 200px;
+            margin: 5px;
+            vertical-align: bottom;
+            font-size: 80px;
+            /* float: left; */
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+
+    </div>
+
+    <script>
+        let pattern = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        let color = 1;
+        let board = document.querySelector('.board');
+        function show() {
+            board.innerHTML = "";
+            for(let k = 0;k < 9;k ++) {
+                let cell = document.createElement('div');
+                let i = Math.floor(k / 3);
+                let j = k % 3;
+                cell.classList.add('cell');
+                cell.innerText = pattern[i][j] === 0 ? "":
+                pattern[i][j] === 1 ? "💙" : "💚";
+                board.appendChild(cell);
+                cell.addEventListener('click', () => {
+                    move(k);
+                })
+            }
+        }
+        show();
+        function move(k) {
+            let i = Math.floor(k / 3);
+            let j = k % 3;
+            pattern[i][j] = color;
+            color = 3 - color;
+            /*  console */ .log(board.childNodes);
+            \/\*  Array \/\* .from(board.childNodes).forEach(e => board.removeChild(e));
+            show();
+            if (check(pattern, 3-color)){
+                console.log(pattern, color)
+                alert((3-color === 1? "💙" : "💚") + "win!!!");
+            }
+            /*  willWin */ (pattern, color);
+            let best = bestChoise(pattern, color);
+            console.log(best)
+            if (best.result > 0) {
+                console.log((color === 1? "💙" : "💚") + "will win!!!");
+            }else if(best.result < 0) {
+                console.log((color === 1? "💚" : "💙") + "will win!!!");
+            }else {
+                console.log('和')
+            }
+        }
+        /*  function */  computerMove(pattern, color) {
+
+        // }
+        function check(pattern, color) {
+            /*  console */ .log(color)
+            // 判断横向
+            let win = true;
+            for (let i = 0;i < 3;i ++) {
+                win = true;
+                for (let j = 0;j < 3;j ++) {
+                    if (pattern[i][j] != color) {
+                        win = false;
+                    }
+                }
+                if (win) {
+                    /*  console */ .log('判断横向')
+                    return true;
+                }
+            }
+            // 判断纵向
+            for (let i = 0;i < 3;i ++) {
+                win = true;
+                for (let j = 0;j < 3;j ++) {
+                    if (pattern[j][i] != color) {
+                        win = false;
+                    }
+                }
+                if (win) {
+                    /*  console */ .log('判断纵向')
+                    return true;
+                }
+            }
+            // 判断正对角线
+            win = true;
+            for (let i = 0;i < 3;i ++) {
+                if (pattern[i][i] != color) {
+                    win = false;
+                }
+            }
+            if (win) {
+                /*  console */ .log('判断正对角线')
+                return true;
+            }
+
+            // 判断斜对角线
+            win = true;
+            for (let i = 0;i < 3;i ++) {
+                if (pattern[i][2-i] != color) {
+                    win = false;
+                }
+            }
+            if (win) {
+                /*  console */ .log('判断斜对角线')
+                return true;
+            }
+            return false;
+        }
+
+        function willWin(pattern, color) {
+            let copy = JSON.parse(JSON.stringify(pattern));
+            for (let i = 0;i < 3;i ++) {
+                for (let j = 0;j < 3;j ++) {
+                    let c = copy[i][j];
+                    if (c != 0) continue;
+                    copy[i][j] = color;
+                    if (check(copy, color)) {
+                       return {
+                           point: [i, j],
+                           result: 1
+                       };
+                    }
+                    copy[i][j] = c;
+                }
+            }
+            return null;
+        }
+        function clone(pattern) {
+            return Object.create(pattern);
+        }
+        function bestChoise(pattern, color) {
+            let p;
+            if (p = willWin(pattern, color)) {
+                return {
+                    point: p,
+                    result: 1
+                }
+            }
+            let result = -2;
+            let point = null;
+            outer:for (let i = 0;i < 3;i ++) {
+                for (let j = 0;j < 3;j ++) {
+                    if (pattern[i][j]) continue;
+                    let copy = JSON.parse(JSON.stringify(pattern));
+                    copy[i][j] = color;
+                    let r = bestChoise(copy, 3-color);
+                    if (-r.result > result) {
+                        point = [i, j];
+                        result = -r.result;
+                    }
+                    if (result == 1) {
+                        break outer;
+                    }
+                }
+            }
+            return {point: point, result: point?result: 0}
+        }
+    </script>
+</body>
+</html>
