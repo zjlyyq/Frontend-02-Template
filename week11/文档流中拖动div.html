@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>drag</title>
+    <style>
+        #dragable {
+            /* border-radius: 50%; */
+            background: url('./range_api.png') no-repeat;
+            background-position: 0;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字    </div>
+    <div id="dragable" style="width: 100px;height: 100px;display: inline-block;" draggable></div>
+    <script>
+        let baseX = 0, baseY = 0;
+        let dragable = document.getElementById('dragable');
+        dragable.addEventListener('mousedown', function(event) {
+            let startX = event.clientX, startY = event.clientY;
+            console.log(startX, startY)
+            console.log('mosuedown')
+            let up = (event) => {
+                baseX += event.clientX - startX;
+                baseY += event.clientY - startY;
+                document.removeEventListener('mousemove', move)
+                document.removeEventListener('mouseup', up)
+            }
+            let move = (event) => {
+                // console.log(event.clientX, event.clientY)
+                // dragable.style.transform = `translate(${(event.clientX - startX + baseX)}px, ${(event.clientY-startY+baseY)}px)`;
+                let range = getNearest(event.clientX, event.clientY);
+                range.insertNode(dragable);
+            }
+            document.addEventListener('mousemove', move)
+            document.addEventListener('mouseup', up)
+        })
+        let ranges = [];
+        let container = document.getElementById('container');
+        console.log(container.childNodes[0])
+        let lastRange = null;
+        for(let i = 0;i < container.childNodes[0].textContent.length;i ++) {
+            let range = document.createRange();
+            if (range === lastRange) break;
+            lastRange = range;
+            range.setStart(container.childNodes[0], i);
+            range.setEnd(container.childNodes[0], i);
+            ranges.push(range);
+            // console.log(range,range.getBoundingClientRect()); //获取每个range的cssom
+        }
+
+        function getNearest(x, y) {
+            let min = Infinity;
+            let nearest = null;
+            for(let range of ranges) {
+                let rect = range.getBoundingClientRect();
+                let distance = (rect.x - x) ** 2 + (rect.y - y) ** 2;
+                if (distance < min) {
+                    nearest = range;
+                    min = distance;
+                }
+            }
+            return nearest;
+        }
+        document.addEventListener('selectstart', event => event.preventDefault())
+    </script>
+</body>
+</html>
