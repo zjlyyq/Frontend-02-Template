@@ -40,7 +40,7 @@ function effect(callback) {
         callbacks.get(reactive[0]).get(reactive[1]).push(callback);
     }
 }
-let data = {a: {x: 1, y: 2}, b: 2}
+let data = {a: {x: 1, y: 2}, b: 2, r: 0, g: 0, b: 0}
 
 let po = reactive(data);
 let c = 0;

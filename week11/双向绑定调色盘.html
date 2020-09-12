@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy双向绑定</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        input {
+            vertical-align: text-bottom;
+        }
+
+        #bg {
+            margin-top: 40px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <input id="input_r" type="range" max="255"><input id="input_r_input" type="text"><br>
+        <input id="input_g" type="range" max="255"><input id="input_g_input" type="text"><br>
+        <input id="input_b" type="range" max="255"><input id="input_b_input" type="text"><br>
+    </div>
+    <div id="bg" style="height: 100px;width:100px;line-height: 100px;display: inline-block;">
+    </div>
+
+    <script src="./reactive.js"></script>
+    <script>
+        effect(() => document.getElementById('input_r').value = po.r);
+        document.getElementById('input_r').addEventListener('input', event => {
+            po.r = event.target.value;
+        })
+        effect(() => document.getElementById('input_g').value = po.g);
+        document.getElementById('input_g').addEventListener('input', event => {
+            po.g = event.target.value;
+        })
+        effect(() => document.getElementById('input_b').value = po.b);
+        document.getElementById('input_b').addEventListener('input', event => {
+            po.b = event.target.value;
+        })
+        effect(() => document.getElementById('input_r_input').value = po.r);
+        document.getElementById('input_r_input').addEventListener('input', event => {
+            po.r = event.target.value;
+        })
+        effect(() => document.getElementById('input_g_input').value = po.g);
+        document.getElementById('input_g_input').addEventListener('input', event => {
+            po.g = event.target.value;
+        })
+        effect(() => document.getElementById('input_b_input').value = po.b);
+        document.getElementById('input_b_input').addEventListener('input', event => {
+            po.b = event.target.value;
+        })
+
+        effect(() => document.getElementById('bg').style.background = `rgb(${po.r}, ${po.g}, ${po.b})`);
+    </script>
+</body>
+
+</html>
