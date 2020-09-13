@@ -1,4 +1,5 @@
-let a = <div class="a" id="app">
+let a = <div class="a" id="app" style="color:red;">
+    div content
     <p>p1</p>
     <p>p2</p>
     <p>p3</p>
