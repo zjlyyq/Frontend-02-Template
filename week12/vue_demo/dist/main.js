@@ -86,14 +86,26 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./main.js":
+/***/ "./App.vue":
 /*!*****************!*\
-  !*** ./main.js ***!
+  !*** ./App.vue ***!
   \*****************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar Div = /*#__PURE__*/function () {\n  function Div() {\n    _classCallCheck(this, Div);\n\n    this.root = document.createElement('div');\n  }\n\n  _createClass(Div, [{\n    key: \"mountTo\",\n    value: function mountTo(parent) {\n      parent.appendChild(this.root);\n    }\n  }, {\n    key: \"setAttribute\",\n    value: function setAttribute(attr, val) {\n      this.root.setAttribute(attr, val);\n    }\n  }, {\n    key: \"appendChild\",\n    value: function appendChild(node) {\n      this.root.appendChild(node);\n    }\n  }]);\n\n  return Div;\n}();\n\nvar a = creatElement(Div, {\n  \"class\": \"a\",\n  id: \"app\"\n}, creatElement(\"p\", null, \"p1\"), creatElement(\"p\", null, \"p2\"), creatElement(Div, {\n  style: \"color: green;\"\n}, creatElement(\"strong\", null, \"DIV\"), \"DIV\"), creatElement(\"p\", {\n  style: \"color: red;\"\n}, \"p3 \", creatElement(\"span\", null, \"span\"), \" \"), creatElement(\"img\", {\n  src: \"\"\n}));\nconsole.log(a); // document.body.appendChild(a);\n\na.mountTo(document.body);\n\n//# sourceURL=webpack:///./main.js?");
+eval("throw new Error(\"Module build failed (from ./node_modules/vue-loader/lib/index.js):\\nTypeError: Cannot read property 'parseComponent' of undefined\\n    at parse (C:\\\\Users\\\\tl_zjl\\\\Documents\\\\MyCode\\\\JavaScript\\\\Frontend-02-Template\\\\week12\\\\vue_demo\\\\node_modules\\\\@vue\\\\component-compiler-utils\\\\dist\\\\parse.js:15:23)\\n    at Object.module.exports (C:\\\\Users\\\\tl_zjl\\\\Documents\\\\MyCode\\\\JavaScript\\\\Frontend-02-Template\\\\week12\\\\vue_demo\\\\node_modules\\\\vue-loader\\\\lib\\\\index.js:67:22)\");\n\n//# sourceURL=webpack:///./App.vue?");
+
+/***/ }),
+
+/***/ "./main.js":
+/*!*****************!*\
+  !*** ./main.js ***!
+  \*****************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ \"./App.vue\");\n/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_App_vue__WEBPACK_IMPORTED_MODULE_0__);\n\n\n//# sourceURL=webpack:///./main.js?");
 
 /***/ })
 
