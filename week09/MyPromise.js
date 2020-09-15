@@ -109,6 +109,9 @@ class MyPromise {
         }
     }
 
+    catch(onRejected) {
+        return this.then(null, onRejected);
+    }
 }
 
 let p1 = new MyPromise((resolve, reject) => {
