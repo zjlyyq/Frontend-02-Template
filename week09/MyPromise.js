@@ -4,6 +4,7 @@ const REJECTED = 'REJECTED';
 
 class MyPromise {
     constructor(executor) {
+        this.PID = Math.random();   // 没用，只不过有利于调试的时候查看
         this.value = null
         this.reason = null
         this.state = PENDING;
@@ -34,6 +35,7 @@ class MyPromise {
     }
 
     then(onFulfilled, onRejected) {
+        console.log('then called')
         const promise2 = new MyPromise((resolve, reject) => {
             if (this.state === PENDING) {
                 this.onFullfilledCallbacks.push(() => {
@@ -88,7 +90,7 @@ class MyPromise {
                     then.call(x, (y) => {
                         if (used) return;
                         used = true;
-                        resolvePromise(promise2, y, resolve, reject)
+                        this.resolvePromise(promise2, y, resolve, reject)
                     }, (r) => {
                         if (used) return;
                         used = true;
@@ -119,15 +121,21 @@ let p1 = new MyPromise((resolve, reject) => {
         resolve(1)
     })
 })
-p1.then(res => {
-    console.log("res1", res);
+let p2 = p1.then(res => {
+    return 2;
 }, error => {
     console.log("error1", error);
 } )
 
-p1.then(res => {
-    console.log("res2", res);
+p2.then( res => {
+    console.log(res)
 }, error => {
-    console.log("error2", error);
+    console.log("error1", error);
 } )
-console.log(p1.value, p1.state)
+
+// p1.then(res => {
+//     console.log("res2", res);
+// }, error => {
+//     console.log("error2", error);
+// } )
+// console.log(p1.value, p1.state)
