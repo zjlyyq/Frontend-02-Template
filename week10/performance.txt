@@ -1,0 +1,25 @@
+["navigationStart",
+"redirectStart",
+"redirectEnd",
+"fetchStart",
+"domainLookupStart",
+"domainLookupEnd",
+"connectStart",
+"secureConnectionStart",
+"connectEnd",
+"requestStart",
+"responseStart",
+"responseEnd",
+"unloadEventStart",
+"unloadEventEnd",
+"domLoading",
+"domInteractive",
+"domContentLoadedEventStart",
+"domContentLoadedEventEnd",
+"domComplete",
+"loadEventStart",
+"loadEventEnd"]
+
+s = `I 
+love 
+paly`
