@@ -6,26 +6,6 @@
     <title>jsx</title>
 </head>
 <body>
-    <script >
-        function creatElement(type, attributes, ...childs) {
-            console.log(arguments);
-            let dom = document.createElement(type);
-            for (let attr in attributes) {
-                dom.setAttribute(attr, attributes[attr])
-            }
-            if (childs) {
-                for(let child of childs) {
-                    if (typeof child === 'string') {
-                        dom.innerText += child;
-                    }else {
-                        dom.appendChild(child)
-                    }
-                }
-            }
-            return dom;
-        }
-    </script>
     <script src="./main.js"></script>
-
 </body>
 </html>
