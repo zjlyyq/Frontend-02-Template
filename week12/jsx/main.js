@@ -22,6 +22,7 @@ class Carousel extends Component{
         this.attributes = Object.create(null);
     }
     render() {
+        this.timer = null;
         this.root = document.createElement('div');
         this.root.classList.add('carousel');
         this.attributes.src.forEach(url => {
@@ -29,79 +30,74 @@ class Carousel extends Component{
             img.style.backgroundImage = `url('${url}')`
             this.root.appendChild(img);
         })
-        this.timer = null;
         let children = this.root.children;
-        let currentIndex = 0, nextIndex, current, next;
-        current = children[currentIndex];
-        nextIndex = (currentIndex + 1) % children.length;
-        next = children[nextIndex];
+        let currentIndex = 0, nextIndex = 1;
+        let current = children[0], next = children[1];
+
         const run = () => {
             this.timer = setInterval(() => {
                 current = children[currentIndex];
                 nextIndex = (currentIndex + 1) % children.length;;
                 next = children[nextIndex];
-                // 先将下一元素移到下一格：
+
+                // 先将下一帧图片移到轮播图可视区的下一格：
                 next.style.transition = "none";
                 next.style.transform = `translateX(${-100*(nextIndex-1)}%)`;
+
+                // 将当前帧和下一帧图片左移一格
                 setTimeout(() => {
                     next.style.transition = "";
                     next.style.transform = `translateX(${-100*nextIndex}%)`;
                     current.style.transform = `translateX(${-100*(currentIndex+1)}%)`;
-                    currentIndex = nextIndex;
                     console.log('currentIndex', currentIndex)
+                    currentIndex = nextIndex; 
                 }, 16);
             }, 3000)
         }
         run();
+
         let position = 0;
         this.root.addEventListener('mousedown', event => {
+            let startX = 0, startY = 0;
+            let offsetX;
+
             position = currentIndex;
             console.log('timeid', this.timer, position)
-            clearInterval(this.timer);
-            this.timer = null;
-            let offset;
+            if (this.timer)
+                clearInterval(this.timer);
+                this.timer = null;
             const move = (event) => {
-                offset = event.clientX - startX;
-                // for (let child of children) {
-                //     child.style.transition = "none";
-                //     child.style.transform = `translateX( ${-position*500 + offset}px)`;
-                // }
+                offsetX = event.clientX - startX;
                 let nears = [-1,0,1];
                 nears.forEach(i => {
                     let j = (position+i+children.length)%children.length
                     children[j].style.transition = "none"
-                    children[j].style.transform = `translateX( ${-j*500 + i*500 + offset}px)`;
+                    children[j].style.transform = `translateX( ${-j*500 + i*500 + offsetX}px)`;
                 })
                 
             }
 
             const up = (event) => {
                 if (!this.timer)
-                    setTimeout(run, 3000);
-                offset = event.clientX - startX ;
-                console.log('mouseup', offset)
-                position -= Math.round(offset / 500);
+                    run()
+                offsetX = event.clientX - startX ;
+                console.log('mouseup', offsetX)
+                position -= Math.round(offsetX / 500);
                 position = (position+children.length)%children.length
-                // for (let child of children) {
-                //     child.style.transition = "";
-                //     child.style.transform = `translateX( ${-100*(position)}%)`;
-                // }
                 let nears = [-1,0,1];
                 nears.forEach(i => {
                     let j = (position+i+children.length)%children.length
                     children[j].style.transition = ""
                     children[j].style.transform = `translateX( ${-j*500 + i*500}px)`;
                 })
-                this.root.removeEventListener('mousemove', move);
-                this.root.removeEventListener('mouseup', up);
+                document.removeEventListener('mousemove', move);
+                document.removeEventListener('mouseup', up);
                 currentIndex = position;
             }
 
-            let startX = 0, startY = 0;
-            console.log('mousedown');
             startX = event.clientX; startY = event.clientY;
-            this.root.addEventListener('mousemove', move);
-            this.root.addEventListener('mouseup', up)
+            document.addEventListener('mousemove', move);
+            document.addEventListener('mouseup', up)
         })
 
         return this.root;
