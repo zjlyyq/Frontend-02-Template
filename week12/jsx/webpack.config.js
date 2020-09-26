@@ -1,6 +1,16 @@
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+
 module.exports = {
-    entry: './main.js',
+    entry: {
+        index: './main.js',
+        demo: './animation-demo/animation-demo.js'
+    },
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: '[name].js'
+    },
     module: {
         rules: [
             {
@@ -28,8 +38,18 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html'
-        })
+            title: 'index',
+            template: './index.html',
+            chunks: ['index'],
+            filename: 'index.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'animation-demo',
+            template: './animation-demo/animation-demo.html',
+            chunks: ['demo'],
+            filename: 'animation-demo.html'
+        }),
+        new CleanWebpackPlugin()
     ],
     devServer: {
         port: 8080,
