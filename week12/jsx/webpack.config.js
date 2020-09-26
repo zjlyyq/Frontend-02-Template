@@ -33,7 +33,7 @@ module.exports = {
     ],
     devServer: {
         port: 8080,
-        host: '192.168.43.133'
+        host: '192.168.199.208'
     },
     mode: "development"
 }

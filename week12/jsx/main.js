@@ -1,5 +1,6 @@
 import { Component, creatElement } from './framwork.js' 
 import { Carousel } from './carousel.js'
+import { Timeline, Animation } from './animations.js'
 import img1 from './static/imgs/d846f329e073d0f7c8143da32a3ca832.jpg'
 import img2 from './static/imgs/b4ff997b68f16f882c255aef8c833626.jpg'
 import img3 from './static/imgs/5196d9fb7fcbbfb43450624045ae81c0.jpg'
@@ -38,3 +39,7 @@ console.log(a)
 // document.body.appendChild(a);
 // a.mountTo(document.body);
 carousel.mountTo(document.body);
+let t1 = new Timeline();
+t1.start();
+let animation = new Animation({}, 'a', 0, 100, 10000, null);
+t1.add(animation);
