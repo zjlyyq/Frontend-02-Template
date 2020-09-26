@@ -39,7 +39,9 @@ console.log(a)
 // document.body.appendChild(a);
 // a.mountTo(document.body);
 carousel.mountTo(document.body);
-let t1 = new Timeline();
-t1.start();
-let animation = new Animation({}, 'a', 0, 100, 10000, null);
-t1.add(animation);
+window.t1 = new Timeline();
+window.t1.start();
+window.animation = new Animation({}, 'a', 0, 100, 10000, null);
+setTimeout(
+    () => (window.t1.add(animation)), 5000
+)
