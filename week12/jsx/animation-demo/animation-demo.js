@@ -9,6 +9,7 @@ let animation = new Animation(
     0,
     500,
     10000,
+    2000,  
     null,
     v => {
         console.log(v);
@@ -26,5 +27,11 @@ document.querySelector('#resume_bt').addEventListener(
     'click',
     () => {
         t1.resume();
+    }
+)
+document.querySelector('#reset_bt').addEventListener(
+    'click',
+    () => {
+        t1.reset();
     }
 )
