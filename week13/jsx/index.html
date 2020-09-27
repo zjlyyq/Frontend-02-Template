@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSX</title>
+    <style>
+        
+        .carousel {
+            overflow: hidden;
+            height: 280px;
+            width: 500px;
+            margin: 0 auto;
+            white-space: nowrap;
+        }
+        .carousel div {
+            display: inline-block;
+            width: 500px;
+            height: 280px;
+            background-size: contain;
+            transition: ease .5s;
+            /* transform: ; */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script src="./framwork.js"></script> -->
+    <!-- <script src="./main.js"></script> -->
+    <!-- <script>
+        function creatElement(type, attributes, ...children) {
+            console.log(arguments);
+            let dom ;
+            if (typeof type === 'string') 
+                dom = document.createElement(type);
+            else 
+                dom = new type
+            for (let attr in attributes) {
+                dom.setAttribute(attr, attributes[attr])
+            }
+            if (children) {
+                for (let child of children) {
+                    if (typeof child === 'string') {
+                        let textNode = document.createTextNode(child);
+                        dom.appendChild(textNode)
+                    } else {
+                        dom.appendChild(child.root || child)
+                    }
+                }
+            }
+            return dom;
+        }
+    </script> -->
+</body>
+
+</html>
