@@ -2,13 +2,32 @@ const VConsole = require('vconsole');
 new VConsole();
 let docElement = document.documentElement;
 
+let handle;
+let contexts = new Map();
+
 docElement.addEventListener('mousedown', event =>  {
     console.log(event);
+    let context = Object.create(null);
+    contexts.set("mouse" + (1 << event.button), context);
+    start(event, context);
     let mousemove = (event) => {
-        console.log(event.clientX, event.clientY);
-    }
+        // console.log(event.clientX, event.clientY);
+        let button = 1;
+
+        while(button <= event.buttons) {
+            if (event.buttons && button) {
+                let context = contexts.get("mouse" + (1 << event.button));
+                move(event, context);
+            }
+            button = button << 1;
+        }
+    }   
 
     let mouseup = (event) => {
+        let context = contexts.get("mouse" + (1 << event.button));
+        end(event, context);
+        contexts.delete("mouse" + (1 << event.button));
+
         docElement.removeEventListener("mousemove", mousemove);
         docElement.removeEventListener("mouseup", mouseup);
     }
@@ -18,10 +37,7 @@ docElement.addEventListener('mousedown', event =>  {
 })
 
 
-let handle;
-let startX, startY;
-let isPan = false, isTap = false, isPress = false;
-let contexts = new Map();
+
 docElement.addEventListener('touchstart', (event) => {
     for (let touch of event.changedTouches) {
         let context = Object.create(null);
@@ -74,7 +90,7 @@ function move(point, context){
         context.isTap = false;
         context.isPress = false;
         console.log('pan start');
-        clearTimeout(cantext.handle);
+        clearTimeout(context.handle);
     }
 
     if (context.isPan) {
@@ -85,7 +101,7 @@ function move(point, context){
 
 function end(point, context) {
     if (context.isTap) {
-        clearInterval(handle);
+        clearInterval(context.handle);
         console.log('tab end');
     }
     if (context.isPress) {
@@ -94,6 +110,7 @@ function end(point, context) {
     if (context.isPan) {
         console.log('pan end');
     }
+    // contexts.delete()
     console.log('touchend', point.clientX, point.clientY);
 }
 
