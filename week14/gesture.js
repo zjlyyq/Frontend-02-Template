@@ -6,16 +6,18 @@ let handle;
 let contexts = new Map();
 
 docElement.addEventListener('mousedown', event =>  {
-    console.log(event);
+    // console.log(event);
     let context = Object.create(null);
     contexts.set("mouse" + (1 << event.button), context);
+    // debugger
     start(event, context);
     let mousemove = (event) => {
         // console.log(event.clientX, event.clientY);
         let button = 1;
-
+        
         while(button <= event.buttons) {
             if (event.buttons && button) {
+                // debugger
                 let context = contexts.get("mouse" + (1 << event.button));
                 move(event, context);
             }
@@ -25,6 +27,7 @@ docElement.addEventListener('mousedown', event =>  {
 
     let mouseup = (event) => {
         let context = contexts.get("mouse" + (1 << event.button));
+        console.log('up');
         end(event, context);
         contexts.delete("mouse" + (1 << event.button));
 
@@ -34,6 +37,7 @@ docElement.addEventListener('mousedown', event =>  {
 
     docElement.addEventListener('mousemove', mousemove);
     docElement.addEventListener('mouseup', mouseup);
+    event.preventDefault();
 })
 
 
