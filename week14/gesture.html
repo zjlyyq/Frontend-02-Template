@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gesture</title>
 </head>
-<body  oncontextmenu="MyFunction">
+<body oncontextmenu="event.preventDefault(">
     <script>
-        function MyFunction() {
-            console.log('eeee')
-        }
+        document.documentElement.addEventListener('tap', () => {
+            console.log('catch tap')
+        })
     </script>
 </body>
 </html>

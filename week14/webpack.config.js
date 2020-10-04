@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     entry: {
-        gesture: './gesture.js',
+        gesture: './main.js',
     },
     output: {
         path: path.resolve(__dirname, './dist'),
