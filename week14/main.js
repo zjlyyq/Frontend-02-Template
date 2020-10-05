@@ -1,3 +1,3 @@
 import enableGesture from './enableGesture.js';
 
-enableGesture();
+enableGesture(document.documentElement);

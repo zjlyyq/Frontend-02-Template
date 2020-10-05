@@ -40,13 +40,14 @@ module.exports = {
             title: 'gesture',
             template: './gesture.html',
             chunks: ['gesture'],
-            filename: 'gesture.html'
+            filename: 'index.html'
         }),
         new CleanWebpackPlugin()
     ],
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         port: 8080,
+        open: true
         // host: '192.168.199.216'
     },
     mode: "development"

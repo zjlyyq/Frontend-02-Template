@@ -55,7 +55,6 @@ class Recognizer{
         this.dispatchtor = dispatch;
     }
     start(point, context) {
-        console.log('touchstart', point.clientX, point.clientY);
         context.startX = point.clientX;
         context.startY = point.clientY;
         context.isPress = false;
@@ -76,13 +75,26 @@ class Recognizer{
             context.isPan = true;
             context.isTap = false;
             context.isPress = false;
-            console.log('pan start');
+            context.isVertical = Math.abs(dx) < Math.abs(dy);
+            // console.log('pan start');
+            this.dispatchtor.dispatch('panStart', {
+                startX: context.startX,
+                startY: context.startY,
+                clientX: point.clientX,
+                clientY: point.clientY,
+                isVertical: context.isVertical
+            })
             clearTimeout(context.handle);
         }
     
         if (context.isPan) {
-            console.log(dx, dy);
-            console.log('pan');
+            this.dispatchtor.dispatch('paning', {
+                startX: context.startX,
+                startY: context.startY,
+                clientX: point.clientX,
+                clientY: point.clientY,
+                isVertical: context.isVertical
+            })
         }
         // 只存当前时间半秒内的点
         context.points.filter(point => Date.now() - point.t < 500);
@@ -100,16 +112,16 @@ class Recognizer{
         }else {
             d = Math.sqrt((point.clientX - context.points[0].x) ** 2 +(point.clientY - context.points[0].y) ** 2)
             v = d / (Date.now() - context.points[0].t);
-            console.log(`t = ${(Date.now() + context.points[0].t)}, v = ${v}`);
+            // console.log(`t = ${(Date.now() + context.points[0].t)}, v = ${v}`);
         }
         if (v > 1.5) {
-            console.log('flick')
             context.isFlick = true;
             this.dispatchtor.dispatch('flick', {
                 startX: context.startX,
                 startY: context.startY,
                 clientX: point.clientX,
                 clientY: point.clientY,
+                isVertical: context.isVertical,
                 isFlick: context.isFlick,
                 velocity: v
             })
@@ -122,19 +134,18 @@ class Recognizer{
             this.dispatchtor.dispatch('tap', {})
         }
         if (context.isPress) {
-            console.log('press end');
+            // console.log('press end');
             this.dispatchtor.dispatch('pressEnd', {})
         }
         if (context.isPan) {
-            console.log('pan end');
             this.dispatchtor.dispatch('panEnd', {
                 startX: context.startX,
                 startY: context.startY,
                 clientX: point.clientX,
                 clientY: point.clientY,
+                isVertical: context.isVertical
             })
         }
-        console.log('touchend', point.clientX, point.clientY);
     }
     
     cancel(point, context) {
@@ -167,6 +178,6 @@ class Dispatch {
     }
 }
 
-export default function enableGesture() {
-    return new Listener(docElement, new Recognizer(new Dispatch(docElement)))
+export default function enableGesture(element) {
+    return new Listener(element, new Recognizer(new Dispatch(element)))
 }
