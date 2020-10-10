@@ -47,6 +47,36 @@ class Listener {
                 this.isLinsteningMode = true;
             }
         })
+
+        element.addEventListener('touchstart', (event) => {
+            for (let touch of event.changedTouches) {
+                let context = Object.create(null);
+                this.contexts.set(touch.identifier, context);
+                recognizer.start(touch, context);
+            }
+        })
+        
+        element.addEventListener('touchmove', (event) => {
+            for (let touch of event.changedTouches) {
+                let context = this.contexts.get(touch.identifier);
+                recognizer.move(touch, context);
+            }
+        })
+        
+        element.addEventListener('touchend', (event) => {
+            for (let touch of event.changedTouches) {
+                let context = this.contexts.get(touch.identifier);
+                recognizer.end(touch, context);
+            }
+        })
+        
+        element.addEventListener('touchcancel', (event) => {
+            for (let touch of event.changedTouches) {
+                let context = this.contexts.get(touch.identifier);
+                recognizer.cancel(touch, context);
+            }
+        })
+        
     }
 }
 

@@ -4,30 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gesture</title>
+    <style>
+        div {
+            background: pink;
+        }
+        .cl1 {
+            background: rebeccapurple;
+        }
+        .cl2 {
+            color: #fff;
+            text-align: center;
+        }
+    </style>
 </head>
 <body oncontextmenu="event.preventDefault()">
+    <div id="app" style="width: 300px;height: 300px;" class="cl1" attr1="value1">
+        组件1
+        <a href="//baidu.com">baidu</a>
+    </div>
     <script>
-        document.documentElement.addEventListener('tap', (event) => {
+        let element = document.querySelector('#app') || document.documentElement;
+        element.addEventListener('tap', (event) => {
             console.log('catch tap', event)
         })
 
-        document.documentElement.addEventListener('panStart', (event) => {
+        element.addEventListener('panStart', (event) => {
             console.log('catch panStart', event)
         })
 
-        document.documentElement.addEventListener('paning', (event) => {
+        element.addEventListener('paning', (event) => {
             console.log('catch paning')
         })
 
-        document.documentElement.addEventListener('panEnd', (event) => {
+        element.addEventListener('panEnd', (event) => {
             console.log('catch panEnd', event)
         })
 
-        document.documentElement.addEventListener('flick', (event) => {
+        element.addEventListener('flick', (event) => {
             console.log('catch flick', event)
         })
 
-        document.documentElement.addEventListener('pressEnd', () => {
+        element.addEventListener('pressEnd', () => {
             console.log('catch pressEnd', event)
         })
     </script>

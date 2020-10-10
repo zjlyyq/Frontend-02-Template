@@ -1,3 +1,4 @@
 import enableGesture from './enableGesture.js';
 
-enableGesture(document.documentElement);
+let element = document.querySelector('#app') || document.documentElement;
+enableGesture(element);
