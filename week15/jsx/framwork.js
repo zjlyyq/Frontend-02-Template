@@ -21,11 +21,15 @@ export function creatElement(type, attributes, ...children) {
     return dom;
 }
 
+export const STATE = Symbol('state');
+export const ATTRIBUTE = Symbol('attribute');
+
 export class Component{ 
     constructor() {
         console.log('Component constructor called');
         // this.root = this.render()
-        this.attributes = Object.create(null);
+        this[ATTRIBUTE] = Object.create(null);
+        this[STATE] = Object.create(null);
     }
 
     render() {
@@ -37,14 +41,17 @@ export class Component{
             this.render();
         parent.appendChild(this.root)
     }
-    setAttribute(attr, val) {
-        this.root.setAttribute(attr, val);
-    }
-    // setAttribute(name, value) {
-    //     this.attributes[name] = value;
+    // setAttribute(attr, val) {
+    //     this.root.setAttribute(attr, val);
     // }
+    setAttribute(name, value) {
+        this[ATTRIBUTE][name] = value;
+    }
     appendChild(node) {
         this.root.appendChild(node);
+    }
+    triggerEvent(type, args) {
+        this[ATTRIBUTE]["on" + type](new CustomEvent(type, {detail: args}));
     }
 }
 

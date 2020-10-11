@@ -1,6 +1,9 @@
 import { Component } from './framwork';
 import { Timeline, Animation} from './animations';
 import enableGesture  from '../enableGesture';
+import { STATE, ATTRIBUTE } from './framwork';
+
+console.log('ATTRIBUTE', ATTRIBUTE)
 class Carousel extends Component{
     constructor() {
         super();
@@ -9,7 +12,7 @@ class Carousel extends Component{
         this.timer = null;
         this.root = document.createElement('div');
         this.root.classList.add('carousel');
-        this.attributes.src.forEach(url => {
+        this[ATTRIBUTE].src.forEach(url => {
             let img = document.createElement('div');
             img.style.backgroundImage = `url('${url}')`
             this.root.appendChild(img);
@@ -22,12 +25,13 @@ class Carousel extends Component{
         let t = 0;   // 记录动画开始时间
         let ax = 0;  // 记录动画产生的偏移
         let children = this.root.children;
-        let position = 0;
+        // let position = 0;
+        this[STATE].position = 0;
 
         const run = () => {
             this.timer = setInterval(() => {
-                let current = children[position];
-                let nextIndex = (position + 1) % children.length;;
+                let current = children[this[STATE].position];
+                let nextIndex = (this[STATE].position + 1) % children.length;;
                 let next = children[nextIndex];
 
                 // 先将下一帧图片移到轮播图可视区的下一格：
@@ -40,8 +44,8 @@ class Carousel extends Component{
                 timeline.add(new Animation(
                     current.style, 
                     "transform", 
-                    (-1*position)*500, 
-                    (-1*(position+1))*500, 
+                    (-1*this[STATE].position)*500, 
+                    (-1*(this[STATE].position+1))*500, 
                     500, 
                     0, 
                     null, 
@@ -58,25 +62,29 @@ class Carousel extends Component{
                     null, 
                     v => `translateX(${v}px)`)
                 );
-                position = nextIndex; 
+
+                this[STATE].position = nextIndex; 
+                this.triggerEvent('Change', {position: this[STATE].position});
             }, 3000)
         }
         run();
-
+        this.root.addEventListener('tap', event => {
+            this.triggerEvent('Click', {data: this[ATTRIBUTE].src[this[STATE].position]});
+        })
         this.root.addEventListener('start', event => {
             timeline.pause();
             clearTimeout(this.timer);
+            // 动画开始运行， 并且还没结束。
             if (t && (Date.now() - t) < 500) {
-                console.log('position', position)
-                position -= 1;
+                this[STATE].position -= 1;
                 ax = ((Date.now() - t) / 500)*500;
                 console.log('ax', ax)
             }
         })
         this.root.addEventListener('paning', event => {
-            console.log('position', position, ax)
+            // console.log('position', position, ax)
             let x = event.clientX - event.startX - ax;
-            let current = position - ((x-x%500) / 500);
+            let current = this[STATE].position - ((x-x%500) / 500);
             let nears = [-1,0,1];
             nears.forEach(i => {
                 let pos = current + i;
@@ -86,7 +94,6 @@ class Carousel extends Component{
             })
         })
         this.root.addEventListener('end', event => {
-            // console.log('catch end and ax = ', ax);
             timeline.reset();
             timeline.start();
             let x = event.clientX - event.startX - ax;
@@ -102,7 +109,7 @@ class Carousel extends Component{
                 }
                 console.log('direction', direction)
             }
-            let current = position - ((x-x%500) / 500);
+            let current = this[STATE].position - ((x-x%500) / 500);
             let nears = [-1,0,1];
             nears.forEach(i => {
                 let pos = current + i;
@@ -118,16 +125,17 @@ class Carousel extends Component{
                     v => `translateX(${v}px)`)
                 );
             })
-            position = (current-direction) % children.length;
-            position = (position % children.length+children.length)%children.length;
+            this[STATE].position = (current-direction) % children.length;
+            this[STATE].position = (this[STATE].position % children.length+children.length)%children.length;
+            this.triggerEvent('Change', {position: this[STATE].position});
             run();
         })
         return this.root;
     }
     
-    setAttribute(name, value) {
-        this.attributes[name] = value;
-    }
+    // setAttribute(name, value) {
+    //     this.attributes[name] = value;
+    // }
 } 
 
 export { Carousel }
