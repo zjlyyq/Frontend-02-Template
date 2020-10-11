@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gesture</title>
+</head>
+<body oncontextmenu="event.preventDefault()">
+    <script>
+        document.documentElement.addEventListener('tap', (event) => {
+            console.log('catch tap', event)
+        })
+
+        document.documentElement.addEventListener('panStart', (event) => {
+            console.log('catch panStart', event)
+        })
+
+        document.documentElement.addEventListener('paning', (event) => {
+            console.log('catch paning')
+        })
+
+        document.documentElement.addEventListener('panEnd', (event) => {
+            console.log('catch panEnd', event)
+        })
+
+        document.documentElement.addEventListener('flick', (event) => {
+            console.log('catch flick', event)
+        })
+
+        document.documentElement.addEventListener('pressEnd', () => {
+            console.log('catch pressEnd', event)
+        })
+    </script>
+</body>
+</html>
