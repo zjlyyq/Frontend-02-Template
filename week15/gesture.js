@@ -10,7 +10,6 @@ docElement.addEventListener('mousedown', event =>  {
     console.log(event);
     let context = Object.create(null);
     contexts.set("mouse" + (1 << event.button), context);
-    // debugger
     start(event, context);
     let mousemove = (event) => {
         // console.log(event.clientX, event.clientY);
@@ -27,7 +26,6 @@ docElement.addEventListener('mousedown', event =>  {
                 else 
                     key = button;
                 let context = contexts.get("mouse" + key);
-                // debugger
                 move(event, context);
             }
             button = button << 1;
@@ -51,7 +49,6 @@ docElement.addEventListener('mousedown', event =>  {
         docElement.addEventListener('mousemove', mousemove);
         docElement.addEventListener('mouseup', mouseup);
         isLinsteningMode = true;
-        // debugger
     }
     
 })

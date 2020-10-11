@@ -10,12 +10,9 @@ export function creatElement(type, attributes, ...children) {
     }
     if (children) {
         for (let child of children) {
-            if (typeof child === 'string') {
-                let textNode = new TextWrapper(child);
-                textNode.mountTo(dom)
-            } else {
-                child.mountTo(dom)
-            }
+            if (typeof child === 'string')
+                child = new TextWrapper(child);
+            dom.appendChild(child);
         }
     }
     return dom;
@@ -33,7 +30,7 @@ export class Component{
     }
 
     render() {
-        return document.createElement('div');
+        return this.root;
     }
 
     mountTo(parent) {
@@ -47,8 +44,9 @@ export class Component{
     setAttribute(name, value) {
         this[ATTRIBUTE][name] = value;
     }
-    appendChild(node) {
-        this.root.appendChild(node);
+    appendChild(child) {
+        // this.root.appendChild(node);
+        child.mountTo(this.root);
     }
     triggerEvent(type, args) {
         this[ATTRIBUTE]["on" + type](new CustomEvent(type, {detail: args}));
@@ -68,5 +66,9 @@ class ElementWrapper extends Component {
         console.log('ElementWrapper constructor called')
         super();   // why
         this.root = document.createElement(type);
+    }
+
+    setAttribute(attr, val) {
+        this.root.setAttribute(attr, val);
     }
 }

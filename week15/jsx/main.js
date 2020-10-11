@@ -1,11 +1,12 @@
 import { Component, creatElement } from './framwork.js' 
-import { Carousel } from './carousel.js'
+import { Carousel } from './Carousel.js'
 import { Timeline, Animation } from './animations.js'
 import img1 from './static/imgs/d846f329e073d0f7c8143da32a3ca832.jpg'
 import img2 from './static/imgs/b4ff997b68f16f882c255aef8c833626.jpg'
 import img3 from './static/imgs/5196d9fb7fcbbfb43450624045ae81c0.jpg'
 import img4 from './static/imgs/97fbdb46b8ad6550dcdb4aa4a062f0bf.jpg'
-
+import { Button } from './Button.js'
+import { List } from './List.js'
 class Div extends Component{
     constructor() {
         super();
@@ -27,21 +28,28 @@ class Div extends Component{
 let catImgs = [
     img1 ,img2, img3, img4
 ]
-let a = <Div class="a" id="app" >
-    <p>p1</p>
-    <p>p2</p>
-    <Div style="color: green;"><strong>DIV</strong>DIV</Div>
-    <p style="color: red;">p3 <span>span</span> </p>
-    <img src='https://static001.geekbang.org/resource/image/51/c0/5196d9fb7fcbbfb43450624045ae81c0.jpg'/>
-</Div>
+let b = <Button style="background:pink;text-align:center;">content</Button>
+let list = <List style="text-align:center;">
+    <img src={img1} style="width:500px"></img>
+    <br></br>
+    <a href = "www.baidu.com">baidu</a>
+</List>
+// let a = <Div class="a" id="app" >
+//     <p>p1</p>
+//     <p>p2</p>
+//     <Div style="color: green;"><strong>DIV</strong>DIV</Div>
+//     <p style="color: red;">p3 <span>span</span> </p>
+//     <img src='https://static001.geekbang.org/resource/image/51/c0/5196d9fb7fcbbfb43450624045ae81c0.jpg'/>
+// </Div>
+
 let carousel = <Carousel src={ catImgs } 
     onChange={ event => console.log(event.detail)}
-    // onClick={ event => console.log(event.detail) }
+    onClick={ event => console.log(event.detail) }
     />
-console.log(a)
-// document.body.appendChild(a);
-// a.mountTo(document.body);
 carousel.mountTo(document.body);
+b.mountTo(document.body);
+list.mountTo(document.body);
+// a.mountTo(document.body);
 window.t1 = new Timeline();
 window.t1.start();
 window.animation = new Animation({}, 'a', 0, 100, 10000, null, null);
