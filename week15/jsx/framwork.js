@@ -25,6 +25,7 @@ export class Component{
     constructor() {
         console.log('Component constructor called');
         // this.root = this.render()
+        this.attributes = Object.create(null);
     }
 
     render() {
@@ -32,12 +33,16 @@ export class Component{
     }
 
     mountTo(parent) {
+        if (!this.root)
+            this.render();
         parent.appendChild(this.root)
     }
     setAttribute(attr, val) {
         this.root.setAttribute(attr, val);
     }
-    
+    // setAttribute(name, value) {
+    //     this.attributes[name] = value;
+    // }
     appendChild(node) {
         this.root.appendChild(node);
     }

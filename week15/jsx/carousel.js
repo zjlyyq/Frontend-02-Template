@@ -4,7 +4,6 @@ import enableGesture  from '../enableGesture';
 class Carousel extends Component{
     constructor() {
         super();
-        this.attributes = Object.create(null);
     }
     render() {
         this.timer = null;
@@ -23,16 +22,13 @@ class Carousel extends Component{
         let t = 0;   // 记录动画开始时间
         let ax = 0;  // 记录动画产生的偏移
         let children = this.root.children;
-        let currentIndex = 0, nextIndex = 1;
-        let current = children[0], next = children[1];
+        let position = 0;
 
         const run = () => {
             this.timer = setInterval(() => {
-                let position = currentIndex;
-                // console.log('position', position);
-                current = children[currentIndex];
-                nextIndex = (currentIndex + 1) % children.length;;
-                next = children[nextIndex];
+                let current = children[position];
+                let nextIndex = (position + 1) % children.length;;
+                let next = children[nextIndex];
 
                 // 先将下一帧图片移到轮播图可视区的下一格：
                 next.style.transition = "none";
@@ -62,20 +58,23 @@ class Carousel extends Component{
                     null, 
                     v => `translateX(${v}px)`)
                 );
-
-                currentIndex = nextIndex; 
+                position = nextIndex; 
             }, 3000)
         }
         run();
 
-        let position = 0;
         this.root.addEventListener('start', event => {
             timeline.pause();
             clearTimeout(this.timer);
-            if (t)
+            if (t && (Date.now() - t) < 500) {
+                console.log('position', position)
+                position -= 1;
                 ax = ((Date.now() - t) / 500)*500;
+                console.log('ax', ax)
+            }
         })
         this.root.addEventListener('paning', event => {
+            console.log('position', position, ax)
             let x = event.clientX - event.startX - ax;
             let current = position - ((x-x%500) / 500);
             let nears = [-1,0,1];
@@ -119,8 +118,8 @@ class Carousel extends Component{
                     v => `translateX(${v}px)`)
                 );
             })
-            position = currentIndex = (current-direction) % children.length;
-            position = currentIndex = (position % children.length+children.length)%children.length;
+            position = (current-direction) % children.length;
+            position = (position % children.length+children.length)%children.length;
             run();
         })
         return this.root;
@@ -128,10 +127,6 @@ class Carousel extends Component{
     
     setAttribute(name, value) {
         this.attributes[name] = value;
-    }
-    mountTo(parent) {
-        // console.log(this.attributes.src)
-        parent.appendChild(this.render());
     }
 } 
 
