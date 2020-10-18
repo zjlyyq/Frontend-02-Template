@@ -28,11 +28,40 @@ class Div extends Component{
 let catImgs = [
     img1 ,img2, img3, img4
 ]
+let cats = [
+    {
+        url: 'https://static001.geekbang.org/resource/image/d8/32/d846f329e073d0f7c8143da32a3ca832.jpg', 
+        title: '白猫'
+    }, 
+    {
+        url: 'https://static001.geekbang.org/resource/image/b4/26/b4ff997b68f16f882c255aef8c833626.jpg',
+        title: '黄猫'
+    }, 
+    {
+        url: 'https://static001.geekbang.org/resource/image/51/c0/5196d9fb7fcbbfb43450624045ae81c0.jpg', 
+        title: '灰白猫'
+    }, 
+    {
+        url: 'https://static001.geekbang.org/resource/image/97/bf/97fbdb46b8ad6550dcdb4aa4a062f0bf.jpg', 
+        title: '黄白猫'
+    }
+]
 let b = <Button style="background:pink;text-align:center;">content</Button>
-let list = <List style="text-align:center;">
-    <img src={img1} style="width:500px"></img>
-    <br></br>
-    <a href = "www.baidu.com">baidu</a>
+// let list = <List style="text-align:center;">
+//     <img src={img1} style="width:500px"></img>
+//     <br></br>
+//     <a href = "www.baidu.com">baidu</a>
+// </List>
+
+let l = <List data={cats}>
+    {/* <h1>模板性children</h1> */}
+    {
+        (recode) => 
+            <div>
+                <img src={recode.url}/>
+                <a href={recode.url}>{recode.title}</a>
+            </div>
+    }
 </List>
 // let a = <Div class="a" id="app" >
 //     <p>p1</p>
@@ -48,7 +77,7 @@ let carousel = <Carousel src={ catImgs }
     />
 carousel.mountTo(document.body);
 b.mountTo(document.body);
-list.mountTo(document.body);
+l.mountTo(document.body);
 // a.mountTo(document.body);
 window.t1 = new Timeline();
 window.t1.start();

@@ -1,5 +1,6 @@
 export function creatElement(type, attributes, ...children) {
-    console.log(arguments);
+    // console.log(arguments);
+    console.log(children);
     let dom ;
     if (typeof type === 'string') 
         dom = new ElementWrapper(type);
@@ -8,13 +9,25 @@ export function creatElement(type, attributes, ...children) {
     for (let attr in attributes) {
         dom.setAttribute(attr, attributes[attr])
     }
-    if (children) {
+    let processChild = (children) => {
         for (let child of children) {
+            if (typeof child === 'object' && (child instanceof Array)){
+                processChild(child);
+                continue;
+            }
             if (typeof child === 'string')
                 child = new TextWrapper(child);
             dom.appendChild(child);
         }
     }
+    // if (children) {
+    //     for (let child of children) {
+    //         if (typeof child === 'string')
+    //             child = new TextWrapper(child);
+    //         dom.appendChild(child);
+    //     }
+    // }
+    processChild(children);
     return dom;
 }
 
