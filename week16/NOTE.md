@@ -158,3 +158,34 @@ module.exports = class extends Generator {
 };
 ```
 ![](./static/imgs/prompts.png)
+
+## 使用文件系统
+### 位置上下文和路径
++ Destination Conetxt —— 项目根目录相关
++ Template Context —— 模板目录相关
+```js
+// Output Location Context and Path
+outputFileSystemContext() {
+    console.log('Destination context: ', this.destinationRoot());   // return the position where the command run 
+    console.log('Destination path: ', this.destinationPath('package.json'));
+    console.log('Template context: ', this.sourceRoot());      // return the position's sub direction templates where the command location 
+    console.log('Template path: ', this.templatePath('index.html'));
+}
+``` 
+![](./static/imgs/file_utils.png)
+### 使用文件工具
+Generators 将所有的文件操作方法暴露在 `this.fs` 上， 它实际上是一个 [mem-fs editor](https://github.com/sboudrias/mem-fs-editor)
+的实例。
+
+**复制文件的例子**
+```js
+// file utilities
+writing() {
+    this.fs.copyTpl(
+        this.templatePath('index.html'),
+        this.destinationPath('public/index.html'),
+        { title: 'Templating with Yeoman' }
+    );
+}
+```
+![](./static/imgs/file_utils.png)

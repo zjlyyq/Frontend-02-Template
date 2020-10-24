@@ -29,4 +29,21 @@ module.exports = class extends Generator {
         this.log("app name", answers.name);
         this.log("cool feature", answers.cool);
     }
+
+    // Output Location Context and Path
+    outputFileSystemContext() {
+        console.log('Destination context: ', this.destinationRoot());   // return the position where the command run 
+        console.log('Destination path: ', this.destinationPath('package.json'));
+        console.log('Template context: ', this.sourceRoot());      // return the position's sub direction templates where the command location 
+        console.log('Template path: ', this.templatePath('index.html'));
+    }
+
+    // file utilities
+    writing() {
+        this.fs.copyTpl(
+            this.templatePath('index.html'),
+            this.destinationPath('public/index.html'),
+            { title: 'Templating with Yeoman' }
+        );
+    }
 };
