@@ -1,4 +1,5 @@
 # 使用Yeoman创建脚手架
+## 起步
 ### NodeJS模块
 首先，创建一个文件夹，将在其中编写我们的脚手架（文件夹📂必须被命名为`generator-name`, generator是你的脚手架名字, 因为Yeoman依靠文件系统来查找可用的生成器。）
 
@@ -115,3 +116,45 @@ npm link
 最后，运行 `yo name`
 ![](./static/imgs/yo%20demo.png)
 可以看到基本功能已经初步成型。
+
+
+## 用户交互
+### Prompts
+Prompts 是最主要的脚手架与用户交互的方式，prompt模块由[Inquirer.js](https://github.com/SBoudrias/Inquirer.js)提供。
+
+**generators/app/index.js**
+```js
+var Generator = require('yeoman-generator');
+
+module.exports = class extends Generator {
+    // The name `constructor` is important here
+    constructor(args, opts) {
+        // Calling the super constructor is important so our generator is correctly set up
+        super(args, opts);
+
+        // Next, add your custom code
+        this.option('babel'); // This method adds support for a `--babel` flag
+    }
+
+    // interacting with the user
+    async prompting() {
+        const answers = await this.prompt([
+            {
+                type: "input",
+                name: "name",
+                message: "Your project name",
+                default: this.appname // Default to current folder name
+            },
+            {
+                type: "confirm",
+                name: "cool",
+                message: "Would you like to enable the Cool feature?"
+            }
+        ]);
+
+        this.log("app name", answers.name);
+        this.log("cool feature", answers.cool);
+    }
+};
+```
+![](./static/imgs/prompts.png)

@@ -10,11 +10,23 @@ module.exports = class extends Generator {
         this.option('babel'); // This method adds support for a `--babel` flag
     }
 
-    method1() {
-        this.log('method 1 just ran');
-    }
+    // interacting with the user
+    async prompting() {
+        const answers = await this.prompt([
+            {
+                type: "input",
+                name: "name",
+                message: "Your project name",
+                default: this.appname // Default to current folder name
+            },
+            {
+                type: "confirm",
+                name: "cool",
+                message: "Would you like to enable the Cool feature?"
+            }
+        ]);
 
-    method2() {
-        this.log('method 2 just ran');
+        this.log("app name", answers.name);
+        this.log("cool feature", answers.cool);
     }
 };
