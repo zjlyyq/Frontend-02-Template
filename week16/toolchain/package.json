@@ -1,0 +1,16 @@
+{
+  "name": "generator-demo",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "Jialu Zhang",
+  "files": [
+    "generators"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^4.12.0"
+  }
+}
