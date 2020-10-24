@@ -189,3 +189,10 @@ writing() {
 }
 ```
 ![](./static/imgs/file_utils.png)
+
+## 管理依赖
+Yeoman将npm 、Yarn 和 Bower等依赖管理工具进行了封装，以便于可以在程序中使用这些工具。
+
+### npm
+只需要调用 `this.npmInstall()` 即可运行npm安装, 也可以添加参数安装特定的包，`this.npmInstall(['lodash'], { 'save-dev': true });`。
+

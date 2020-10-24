@@ -29,7 +29,20 @@ module.exports = class extends Generator {
         this.log("app name", answers.name);
         this.log("cool feature", answers.cool);
     }
-
+    writingPkgJson() {
+        const pkgJson = {
+            devDependencies: {
+                eslint: '^3.15.0'
+            },
+            dependencies: {
+                vue: '^2.6.11'
+            }
+        };
+        this.fs.extendJSON(this.destinationPath('package.json'), pkgJson);
+    }
+    installDependencies() {
+        this.npmInstall();
+    }
     // Output Location Context and Path
     outputFileSystemContext() {
         console.log('Destination context: ', this.destinationRoot());   // return the position where the command run 
@@ -39,7 +52,7 @@ module.exports = class extends Generator {
     }
 
     // file utilities
-    writing() {
+    writingHtml() {
         this.fs.copyTpl(
             this.templatePath('index.html'),
             this.destinationPath('public/index.html'),
