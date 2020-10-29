@@ -1,5 +1,5 @@
 var assert = require('assert');
-const amtSub = require('../amtSub');
+import amtSub from '../amtSub';
 
 describe('test price utils', function () {
     describe('float price sub', function () {

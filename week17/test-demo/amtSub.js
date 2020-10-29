@@ -1,4 +1,4 @@
-module.exports = function amtSub(amt1, amt2) {
+export default function amtSub(amt1, amt2) {
 	var carry = 0;
 	var p1 = amt1.split('.')[1], p2 = amt2.split(".")[1];
 	var z1 = amt1.split('.')[0], z2 = amt2.split('.')[0];
