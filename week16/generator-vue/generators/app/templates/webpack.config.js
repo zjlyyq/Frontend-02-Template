@@ -1,6 +1,8 @@
 const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack'); //to access built-in plugins
-const CopyPlugin = require('copy-webpack-plugin');
+// const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 module.exports = {
     entry: './src/main.js',
@@ -12,17 +14,26 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     'vue-style-loader',
-                    'css-loader'
+                    'css-loader',
+                    'postcss-loader'
                 ]
             }
         ]
     },
     plugins: [
         new VueLoaderPlugin(),
-        new CopyPlugin({
-            patterns: [
-                { from: './src/*.html', to: '[name].[ext]' },
-            ],
-        }),
-    ]
+        new HtmlWebpackPlugin(),
+        // new CopyPlugin({
+        //     patterns: [
+        //         { from: './src/*.html', to: '[name].[ext]' },
+        //     ],
+        // }),
+    ],
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 8080,
+        open: true,
+        hot: true
+    }
 };

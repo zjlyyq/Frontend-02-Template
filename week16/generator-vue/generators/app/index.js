@@ -42,11 +42,16 @@ module.exports = class extends Generator {
             //     message: "Would you like to enable the Cool feature?"
             // }
         ]);
-        
+
         this.fs.copyTpl(
             this.templatePath('index.html'), 
             this.destinationPath('src/index.html'),
             { title: answers.name }
+        );
+        this.fs.copyTpl(
+            this.templatePath('README.md'), 
+            this.destinationPath('README.md'),
+            { projectName: answers.name }
         );
         const pkgJson = {
             "name": answers.name,
@@ -55,6 +60,7 @@ module.exports = class extends Generator {
             "main": "index.js",
             "scripts": {
                 "test": "echo \"Error: no test specified\" && exit 1",
+                "serve": "webpack-dev-server",
                 "build": "webpack --config webpack.config.js"
             },
             "devDependencies": {
@@ -66,7 +72,21 @@ module.exports = class extends Generator {
         }
         this.fs.extendJSON(this.destinationPath('package.json'), pkgJson);
         this.npmInstall(['vue'], { 'save-dev': false });
-        this.npmInstall(['webpack', 'webpack-cli', 'copy-webpack-plugin', 'vue-loader', 'vue-template-compiler', 'vue-style-loader', 'css-loader'], { 'save-dev': true });
+        this.npmInstall(
+            [
+                'webpack', 
+                'webpack-cli', 
+                'html-webpack-plugin',
+                'copy-webpack-plugin', 
+                'vue-loader', 
+                'vue-template-compiler', 
+                'vue-style-loader', 
+                'css-loader',
+                'postcss-loader',
+                'webpack-dev-server'
+            ], 
+            { 'save-dev': true }
+        );
     }
 
     copeFiles() {
