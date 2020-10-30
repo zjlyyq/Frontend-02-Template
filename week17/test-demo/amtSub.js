@@ -1,37 +1,40 @@
 export default function amtSub(amt1, amt2) {
-	var carry = 0;
-	var p1 = amt1.split('.')[1], p2 = amt2.split(".")[1];
-	var z1 = amt1.split('.')[0], z2 = amt2.split('.')[0];
-	if (p1 == undefined) {
-        p1 = "00";
+    var carry = 0;  // 借位
+    // decimal part
+	var dec_p1 = amt1.split('.')[1], dec_p2 = amt2.split(".")[1];
+    // integer part
+    var int_p1 = amt1.split('.')[0], int_p2 = amt2.split('.')[0];
+	if (dec_p1 == undefined) {
+        dec_p1 = "00";
     }
-    if (p2 == undefined) {
-        p2 = "00";
+    if (dec_p2 == undefined) {
+        dec_p2 = "00";
     }
-    if (p1.length < 2) {
-        p1 += "0";
+    
+    if (dec_p1.length < 2) {
+        dec_p1 += "0";
     }
-    if (p2.length < 2) {
-        p2 += "0";
+    if (dec_p2.length < 2) {
+        dec_p2 += "0";
     }
 	var ans = "";
 	var c = 1;
 	while(c >= 0) {
-		ans = (parseInt(p1[c]) + carry >= parseInt(p2[c]) ? parseInt(p1[c]) + carry - parseInt(p2[c]):
-		parseInt(p1[c]) + carry + 10 - parseInt(p2[c])) + ans;
-		carry =  parseInt(p1[c]) + carry >= parseInt(p2[c]) ? 0 : -1;
+		ans = (parseInt(dec_p1[c]) + carry >= parseInt(dec_p2[c]) ? parseInt(dec_p1[c]) + carry - parseInt(dec_p2[c]):
+		parseInt(dec_p1[c]) + carry + 10 - parseInt(dec_p2[c])) + ans;
+		carry =  parseInt(dec_p1[c]) + carry >= parseInt(dec_p2[c]) ? 0 : -1;
 		c -= 1;
 	}
 	ans = "." + ans;
-	c = z1.length - z2.length;
+	c = int_p1.length - int_p2.length;
 	while(c --) {
-		z2 = '0' + z2;
+		int_p2 = '0' + int_p2;
 	}
-	c = z1.length-1;
+	c = int_p1.length-1;
 	while(c >= 0) {
-		ans = (parseInt(z1[c]) + carry >= parseInt(z2[c]) ? parseInt(z1[c]) + carry - parseInt(z2[c]):
-		parseInt(z1[c]) + carry + 10 - parseInt(z2[c])) + ans;
-		carry =  parseInt(z1[c]) + carry >= parseInt(z2[c]) ? 0 : -1;
+		ans = (parseInt(int_p1[c]) + carry >= parseInt(int_p2[c]) ? parseInt(int_p1[c]) + carry - parseInt(int_p2[c]):
+		parseInt(int_p1[c]) + carry + 10 - parseInt(int_p2[c])) + ans;
+		carry =  parseInt(int_p1[c]) + carry >= parseInt(int_p2[c]) ? 0 : -1;
 		c -= 1;
     }
     var offset = 0;

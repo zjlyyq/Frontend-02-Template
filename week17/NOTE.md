@@ -1,4 +1,4 @@
-### mocha 简单使用
+### 截屏2020-10-30 22.21.00mocha 简单使用
 
 > 8.0以后, Mocha 需要 Node.js的版本号高于 v10.12.0
 
@@ -38,4 +38,27 @@ describe('test price utils', function () {
 ```js
 mocha --require @babel/register
 ```
+
+### code coverage
+
+**安装nyc**
+
+```bash
+npm i -D nyc
+```
+
+**package.json**
+
+```diff
+  "scripts": {
+      "test": "mocha --require @babel/register",
++      "coverage": "nyc npm run test"
+  },
+```
+
+**run**
+
+![](./static/截屏2020-10-30 22.21.00.png)
+
+![截屏2020-10-30 22.40.01](./static/截屏2020-10-30 22.40.01.png)
 
