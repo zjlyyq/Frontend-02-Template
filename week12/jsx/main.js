@@ -34,6 +34,7 @@ let a = <Div class="a" id="app" >
     <p style="color: red;">p3 <span>span</span> </p>
     <img src='https://static001.geekbang.org/resource/image/51/c0/5196d9fb7fcbbfb43450624045ae81c0.jpg'/>
 </Div>
+// let a = <Div>aaa</Div>
 let carousel = <Carousel src={ catImgs }/>
 console.log(a)
 // document.body.appendChild(a);

@@ -55,5 +55,6 @@ module.exports = {
         port: 8080,
         host: '192.168.199.208'
     },
-    mode: "development"
+    mode: "development",
+    devtool: 'source-map'
 }

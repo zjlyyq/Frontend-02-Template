@@ -12,9 +12,9 @@ export function creatElement(type, attributes, ...children) {
         for (let child of children) {
             if (typeof child === 'string') {
                 let textNode = new TextWrapper(child);
-                textNode.mountTo(dom)
+                textNode.mountTo(dom.root)
             } else {
-                child.mountTo(dom)
+                child.mountTo(dom.root)
             }
         }
     }
