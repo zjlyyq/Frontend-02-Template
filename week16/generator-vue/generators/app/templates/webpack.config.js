@@ -22,7 +22,9 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin(
+            {template: './src/index.html'}
+        ),
         // new CopyPlugin({
         //     patterns: [
         //         { from: './src/*.html', to: '[name].[ext]' },

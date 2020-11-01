@@ -53,6 +53,11 @@ module.exports = class extends Generator {
             this.destinationPath('README.md'),
             { projectName: answers.name }
         );
+        this.fs.copyTpl(
+            this.templatePath('sample-test.js'), 
+            this.destinationPath('test/sample-test.js'),
+            { title: answers.name }
+        );
         const pkgJson = {
             "name": answers.name,
             "version": "1.0.0",
@@ -61,9 +66,13 @@ module.exports = class extends Generator {
             "scripts": {
                 "test": "echo \"Error: no test specified\" && exit 1",
                 "serve": "webpack-dev-server",
-                "build": "webpack --config webpack.config.js"
+                "build": "webpack --config webpack.config.js",
+                "test": "mocha",
+                "coverage": "nyc npm run test"
             },
             "devDependencies": {
+                "webpack": "^4.44.1",
+                "webpack-cli": "^3.3.12",
             },
             "dependencies": {
             },
@@ -74,16 +83,21 @@ module.exports = class extends Generator {
         this.npmInstall(['vue'], { 'save-dev': false });
         this.npmInstall(
             [
-                'webpack', 
-                'webpack-cli', 
+                // 默认会安装最新的 webpack5.x，暂时还不会用😂
+                // 'webpack', 
+                // 'webpack-cli', 
                 'html-webpack-plugin',
                 'copy-webpack-plugin', 
                 'vue-loader', 
                 'vue-template-compiler', 
                 'vue-style-loader', 
                 'css-loader',
+                '@babel/core',
+                '@babel/preset-env',
                 'postcss-loader',
-                'webpack-dev-server'
+                'webpack-dev-server',
+                'mocha',
+                'nyc'
             ], 
             { 'save-dev': true }
         );
@@ -107,9 +121,9 @@ module.exports = class extends Generator {
             this.destinationPath('webpack.config.js')
         );
     }
-    // installDependencies() {
-    //     this.npmInstall();
-    // }
+    installDependencies() {
+        this.npmInstall();
+    }
 
     // file utilities
     // writingHtml() {
