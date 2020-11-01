@@ -4,17 +4,16 @@ export default function amtSub(amt1, amt2) {
 	var dec_p1 = amt1.split('.')[1], dec_p2 = amt2.split(".")[1];
     // integer part
     var int_p1 = amt1.split('.')[0], int_p2 = amt2.split('.')[0];
-	if (dec_p1 == undefined) {
+	if (dec_p1 == undefined || dec_p1.length === 0) {
         dec_p1 = "00";
     }
-    if (dec_p2 == undefined) {
+    if (dec_p2 == undefined || dec_p2.length === 0) {
         dec_p2 = "00";
     }
-    
-    if (dec_p1.length < 2) {
+    if (dec_p1.length === 1) {
         dec_p1 += "0";
     }
-    if (dec_p2.length < 2) {
+    if (dec_p2.length === 1) {
         dec_p2 += "0";
     }
 	var ans = "";
@@ -40,6 +39,7 @@ export default function amtSub(amt1, amt2) {
     var offset = 0;
     for(var i = 0;i < ans.length - 2;i ++) {
         if (ans[i] == '0' && ans[i+1] != '.') {
+            // 当结果出现0开头情况，需要截掉开头的0
             offset += 1;
         }else {
 			break;
