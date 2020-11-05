@@ -2,8 +2,8 @@ let http = require('http');
 const fs = require('fs');
 
 let request = http.request({
-    hostname: "127.0.0.1",
-    port: 3001,
+    hostname: "121.199.20.52",
+    port: 8089,
     method: 'post',
     headers: {
         'Content-Type': 'application/octet-stream'
@@ -12,7 +12,7 @@ let request = http.request({
     console.log(res);
 })
 
-let data = fs.createReadStream('../publish-server/package.json');
+let data = fs.createReadStream('./sample.html');
 data.on('data', (chunk) => {
     console.log('chunk:', chunk);
     request.write(chunk);

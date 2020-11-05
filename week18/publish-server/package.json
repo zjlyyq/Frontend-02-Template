@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "scp -r -P 22 ./* root@121.199.20.52:~/nodeApps/publish-server"
   },
   "keywords": [],
   "author": "",

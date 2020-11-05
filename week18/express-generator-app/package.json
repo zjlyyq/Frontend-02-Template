@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www", 
+    "publish": "scp -r -P 22 ./* root@121.199.20.52:~/nodeApps"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
