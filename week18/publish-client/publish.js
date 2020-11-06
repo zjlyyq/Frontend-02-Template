@@ -1,31 +1,33 @@
 let http = require('http');
 const fs = require('fs');
 const path = require('path');
+const archiver = require('archiver');
+const archive = archiver('zip', {
+    zlib: { level: 9 }
+});
 
-let request = http.request({
-    hostname: "121.199.20.52",
-    port: 8089,
-    method: 'post',
-    headers: {
-        'Content-Type': 'application/octet-stream'
-    }
-}, res => {
-    console.log(res.toString());
-})
+archive.directory(path.resolve(__dirname, '../sample/'), false);
+archive.finalize();
 
-let data = fs.createReadStream(path.resolve(__dirname, './sample.html'));
-
-// data.on('data', (chunk) => {
-//     console.log('chunk:', chunk);
-//     request.write(chunk);
-// })
-
-// data.on('end', (chunk) => {
-//     console.log('read finished', chunk);
-//     request.end(chunk);
-// })
-
-data.pipe(request);
-data.on('end', () => {
-    request.end();
+fs.stat(path.resolve(__dirname, '../sample/sample.html'), function(err, stats) {
+    if (err) throw err;
+    console.log(stats);
+    let request = http.request({
+        hostname: "121.199.20.52",
+        port: 8089,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/octet-stream',
+        }
+    }, res => {
+        console.log(res.toString());
+    })
+    archive.pipe(request);
+    archive.on('error', function(err) {
+        throw err;
+    });
+    archive.on('end', () => {
+        console.log('pipe end');
+        request.end();
+    })
 })
