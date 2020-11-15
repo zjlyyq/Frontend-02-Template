@@ -49,3 +49,5 @@ module.exports = {
 ```
 ### Chrome Headless 检查dom
 无头浏览器是自动化测试和不需要可见UI外壳的服务器环境的绝佳工具。
+
+[官方链接](https://developers.google.com/web/updates/2017/04/headless-chrome)
